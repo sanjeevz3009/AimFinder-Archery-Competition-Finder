@@ -1,65 +1,308 @@
-import Image from "next/image";
+import Link from 'next/link';
+import {
+  Search,
+  Sparkles,
+  MapPin,
+  BookOpen,
+  Target,
+  Users,
+  Building2,
+  ArrowRight,
+  CheckCircle2,
+} from 'lucide-react';
+import type { Metadata } from 'next';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { CompetitionCard } from '@/components/competition-card';
+import { LevelSelector } from '@/components/level-selector';
+import { QuickFilters } from '@/components/competition-filters';
+import { competitions } from '@/lib/data';
 
-export default function Home() {
+// ISR: revalidate every hour. The homepage content is mostly stable but
+// we want featured competitions to update when new events are added.
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'AimFinder — Find Archery Competitions That Match Your Level',
+  description:
+    'Search indoor, outdoor, novice, club and open archery competitions near you — with AI guidance to help you choose the right event.',
+};
+
+// Show the 3 most imminent competitions as featured
+const featuredCompetitions = competitions
+  .slice()
+  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  .slice(0, 3);
+
+const howItWorks = [
+  {
+    icon: Search,
+    title: 'Search by level and location',
+    description:
+      'Find competitions near you that match your experience level and bowstyle preferences.',
+  },
+  {
+    icon: BookOpen,
+    title: 'Understand the round format',
+    description:
+      'Read our guides to learn about different round types before you enter.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Get AI guidance before entering',
+    description:
+      'Ask our AI coach for personalised recommendations based on your experience.',
+  },
+];
+
+const valueProps = [
+  {
+    icon: Target,
+    title: 'For archers',
+    description:
+      'Find suitable events faster. Filter by level, bowstyle, and location to discover competitions that match your experience.',
+    highlight: 'Find your perfect competition',
+  },
+  {
+    icon: Users,
+    title: 'For clubs',
+    description:
+      'Improve event discovery. Help potential entrants find your competitions through intelligent search and filtering.',
+    highlight: 'Reach more archers',
+  },
+  {
+    icon: Building2,
+    title: 'For organisers',
+    description:
+      'Reduce unsuitable entries. Clear suitability information helps archers self-select appropriate events.',
+    highlight: 'Better quality entries',
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-border">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36">
+          <div className="max-w-3xl">
+            <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Find archery competitions that match your level
+            </h1>
+            <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
+              Search indoor, outdoor, novice, club and open competitions near
+              you - with AI guidance to help you choose the right event.
+            </p>
+
+            {/* Primary CTAs */}
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href="/competitions">
+                  <Search className="mr-2 h-5 w-5" />
+                  Find competitions
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/assistant">
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Ask the AI coach
+                </Link>
+              </Button>
+            </div>
+
+            {/* Location search bar */}
+            <div className="mt-12 max-w-xl">
+              <div className="relative">
+                <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Enter your location or postcode..."
+                  className="h-14 border-border bg-card pl-12 pr-32 text-base"
+                />
+                <Button
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  asChild
+                >
+                  <Link href="/competitions">Search</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick filter chips */}
+            <div className="mt-6">
+              <p className="mb-3 text-sm text-muted-foreground">
+                Popular searches:
+              </p>
+              <QuickFilters />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured competitions */}
+      <section className="border-b border-border py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-3xl font-bold text-foreground">
+                Featured competitions
+              </h2>
+              <p className="mt-2 text-muted-foreground">
+                Upcoming events that are accepting entries
+              </p>
+            </div>
+            <Button variant="outline" asChild>
+              <Link href="/competitions">
+                View all competitions
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {featuredCompetitions.map((competition) => (
+              <CompetitionCard
+                key={competition.slug}
+                competition={competition}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="border-b border-border bg-card py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-foreground">How it works</h2>
+            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+              From discovery to entry, we help you find the right competition
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            {howItWorks.map((item, index) => (
+              <Card key={item.title} className="border-border bg-background">
+                <CardContent className="p-6">
+                  <div className="mb-4 flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                      <item.icon className="h-6 w-6 text-accent" />
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground">
+                      Step {index + 1}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Level selector */}
+      <section className="border-b border-border py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-foreground">
+                Competitions for every level
+              </h2>
+              <p className="mt-4 leading-relaxed text-muted-foreground">
+                Whether you&apos;re shooting your first competition or competing
+                at county level, we help you find events that match your
+                experience.
+              </p>
+              <ul className="mt-8 space-y-4">
+                {[
+                  'Beginner-friendly events with mentoring',
+                  'Novice competitions for building experience',
+                  'Club-level shoots for regular competitors',
+                  'County and open events for serious archers',
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3">
+                    <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-accent" />
+                    <span className="text-foreground">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <LevelSelector />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value props */}
+      <section className="bg-card py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold text-foreground">
+              Built for the archery community
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Helping archers, clubs, and organisers connect
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {valueProps.map((prop) => (
+              <Card key={prop.title} className="border-border bg-background">
+                <CardContent className="p-6">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                    <prop.icon className="h-6 w-6 text-accent" />
+                  </div>
+                  <Badge className="mb-4 border-0 bg-accent/20 text-accent">
+                    {prop.highlight}
+                  </Badge>
+                  <h3 className="text-xl font-semibold text-foreground">
+                    {prop.title}
+                  </h3>
+                  <p className="mt-2 leading-relaxed text-muted-foreground">
+                    {prop.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Final CTA */}
+      <section className="border-t border-border py-20">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-foreground">
+            Ready to find your next competition?
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            Start searching now or ask our AI coach for personalised
+            recommendations based on your experience level and location.
           </p>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button size="lg" asChild>
+              <Link href="/competitions">
+                Browse competitions
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/assistant">
+                <Sparkles className="mr-2 h-5 w-5" />
+                Get AI recommendations
+              </Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }
