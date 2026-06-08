@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // Allow images from common archery venue domains in future
-  // For now we use no external images — placeholder avatars only
+  // For now I use no external images - placeholder avatars only
   images: {
     remotePatterns: [],
   },

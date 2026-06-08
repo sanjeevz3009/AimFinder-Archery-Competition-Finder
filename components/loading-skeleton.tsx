@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
-// Generic loading state — used as a fallback while data fetches
+// Generic loading state - used as a fallback while data fetches
 export function LoadingSkeleton({ className }: { className?: string }) {
   return (
     <div className={cn('space-y-4', className)}>

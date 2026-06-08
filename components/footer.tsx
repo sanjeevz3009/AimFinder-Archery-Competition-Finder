@@ -19,7 +19,7 @@ const footerLinks = {
   ],
 };
 
-// Site-wide footer. Server Component — no interactivity needed.
+// Site-wide footer. Server Component - no interactivity needed.
 export function Footer() {
   return (
     <footer className="border-t border-border bg-card">

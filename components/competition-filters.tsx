@@ -241,7 +241,7 @@ function CheckboxRow({
   );
 }
 
-// Public exports — Suspense wrappers required because useSearchParams()
+// Public exports - Suspense wrappers required because useSearchParams()
 // must be inside a Suspense boundary in Next.js App Router.
 
 /** Desktop sidebar filter panel */

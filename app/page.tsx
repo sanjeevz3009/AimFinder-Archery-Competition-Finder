@@ -2,7 +2,6 @@ import Link from 'next/link';
 import {
   Search,
   Sparkles,
-  MapPin,
   BookOpen,
   Target,
   Users,
@@ -12,12 +11,11 @@ import {
 } from 'lucide-react';
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CompetitionCard } from '@/components/competition-card';
 import { LevelSelector } from '@/components/level-selector';
-import { QuickFilters } from '@/components/competition-filters';
+import { HeroSearch } from '@/components/hero-search';
 import { competitions } from '@/lib/data';
 
 // ISR: revalidate every hour. The homepage content is mostly stable but
@@ -94,7 +92,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
               Search indoor, outdoor, novice, club and open competitions near
-              you - with AI guidance to help you choose the right event.
+              you — with AI guidance to help you choose the right event.
             </p>
 
             {/* Primary CTAs */}
@@ -113,29 +111,9 @@ export default function HomePage() {
               </Button>
             </div>
 
-            {/* Location search bar */}
+            {/* Hero search — client component so it can use useRouter */}
             <div className="mt-12 max-w-xl">
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Enter your location or postcode..."
-                  className="h-14 border-border bg-card pl-12 pr-32 text-base"
-                />
-                <Button
-                  className="absolute right-2 top-1/2 -translate-y-1/2"
-                  asChild
-                >
-                  <Link href="/competitions">Search</Link>
-                </Button>
-              </div>
-            </div>
-
-            {/* Quick filter chips */}
-            <div className="mt-6">
-              <p className="mb-3 text-sm text-muted-foreground">
-                Popular searches:
-              </p>
-              <QuickFilters />
+              <HeroSearch />
             </div>
           </div>
         </div>
@@ -184,7 +162,10 @@ export default function HomePage() {
 
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {howItWorks.map((item, index) => (
-              <Card key={item.title} className="border-border bg-background">
+              <Card
+                key={item.title}
+                className="border-border bg-background transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+              >
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
@@ -210,8 +191,9 @@ export default function HomePage() {
       {/* Level selector */}
       <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
+            {/* Left col — static, never moves */}
+            <div className="lg:pt-2">
               <h2 className="text-3xl font-bold text-foreground">
                 Competitions for every level
               </h2>
@@ -234,6 +216,7 @@ export default function HomePage() {
                 ))}
               </ul>
             </div>
+            {/* Right col — grows as recommendations appear, left col unaffected */}
             <div>
               <LevelSelector />
             </div>
@@ -255,7 +238,10 @@ export default function HomePage() {
 
           <div className="grid gap-8 md:grid-cols-3">
             {valueProps.map((prop) => (
-              <Card key={prop.title} className="border-border bg-background">
+              <Card
+                key={prop.title}
+                className="border-border bg-background transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+              >
                 <CardContent className="p-6">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
                     <prop.icon className="h-6 w-6 text-accent" />
@@ -275,7 +261,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
 
       {/* Final CTA */}
       <section className="border-t border-border py-20">

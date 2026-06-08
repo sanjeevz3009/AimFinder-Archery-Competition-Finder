@@ -9,7 +9,7 @@ export type Competition = {
   postcode: string;
   round: 'WA18' | 'Portsmouth' | 'WA70' | 'Club 252';
   bowstyles: Array<'Recurve' | 'Compound' | 'Barebow' | 'Longbow'>;
-  // Display-friendly level label
+  /** Display-friendly level label */
   level: 'Beginner' | 'Novice' | 'Club' | 'County' | 'Open';
   indoorOutdoor: 'Indoor' | 'Outdoor';
   entryFee: number;
@@ -30,7 +30,6 @@ export type Guide = {
   suitableFor: string[];
   content: string;
   beginnerTips: string[];
-  // Frequently asked questions
   faqs: Array<{ question: string; answer: string }>;
 };
 
@@ -351,7 +350,7 @@ export const guides: Guide[] = [
     slug: 'wa18',
     title: 'WA18 Indoor Round Guide',
     summary:
-      'The WA18 is the most popular indoor archery competition format - shot at 18 metres on a 40cm target face. Suitable for all bowstyles and all levels from novice upwards.',
+      'The WA18 is the most popular indoor archery competition format — shot at 18 metres on a 40cm target face. Suitable for all bowstyles and all levels from novice upwards.',
     distance: '18 metres',
     targetFace: '40cm (10-ring face)',
     arrows: '60 arrows (10 ends of 6)',
@@ -367,8 +366,8 @@ Because it is shot indoors at a fixed distance, the WA18 is not affected by wind
 For beginners, the WA18 is ideal because the 18m distance is achievable with a light bow, the target face is relatively large, and the indoor environment is forgiving. Your first WA18 score becomes your baseline — you will see it improve quickly.`,
     beginnerTips: [
       'Arrive at least 30 minutes early to sign in, collect your scorecard and find your boss (target).',
-      'You will shoot in a group of 3-4 archers. Take turns to go to the target and score together — always call your highest arrow first.',
-      'A score of 400-500 out of 600 is a solid first result for a beginner. Do not compare yourself to experienced archers.',
+      'You will shoot in a group of 3–4 archers. Take turns to go to the target and score together — always call your highest arrow first.',
+      'A score of 400–500 out of 600 is a solid first result for a beginner. Do not compare yourself to experienced archers.',
       'Bring a pencil (not a pen) for scoring, a spare finger tab or glove, and water.',
       'If you are unsure about a score, call the judge before touching the arrow — arrows can be re-examined but not after they are pulled.',
       'Dress comfortably. There is no dress code at most club-level events.',
@@ -382,7 +381,7 @@ For beginners, the WA18 is ideal because the 18m distance is achievable with a l
       {
         question: 'What is a good score for a first WA18?',
         answer:
-          "For a beginner, any score is a great score. Many archers shoot 300-450 in their first competition. The national classification system starts at 'Archer' level (around 252 for recurve), so that is a common early target.",
+          "For a beginner, any score is a great score. Many archers shoot 300–450 in their first competition. The national classification system starts at 'Archer' level (around 252 for recurve), so that is a common early target.",
       },
       {
         question: 'Do I need an Archery GB record card?',
@@ -407,7 +406,7 @@ For beginners, the WA18 is ideal because the 18m distance is achievable with a l
     suitableFor: ['Recurve', 'Compound', 'Barebow', 'Longbow'],
     content: `The Portsmouth round is one of Britain's oldest and most beloved indoor archery formats. Shot at 20 yards (18.29 metres) on a 60cm target face, it is slightly longer and uses a larger face than the WA18 — making it particularly popular with longbow archers and those who prefer a bigger aiming point.
 
-The 60cm face is available in both 5-zone (scoring 9, 7, 5, 3, 1) and 10-zone (1-10) configurations. Many clubs and competitions use the 10-zone face for more granular scoring, but some traditional events retain the 5-zone.
+The 60cm face is available in both 5-zone (scoring 9, 7, 5, 3, 1) and 10-zone (1–10) configurations. Many clubs and competitions use the 10-zone face for more granular scoring, but some traditional events retain the 5-zone.
 
 Because the Portsmouth is a British domestic round (not a World Archery standard), it appears at club nights and local competitions more frequently than anywhere else. It is an excellent second competition for anyone who has already shot a WA18.
 
@@ -442,7 +441,7 @@ Longbow and barebow archers particularly enjoy the Portsmouth because the 60cm f
     title: "Your First Competition: A Beginner's Guide",
     summary:
       'Everything you need to know before entering your first archery competition — what to expect, what to bring, how scoring works, and how to choose the right event.',
-    distance: 'Varies (18m-20 yards typical)',
+    distance: 'Varies (18m–20 yards typical)',
     targetFace: '40cm or 60cm',
     arrows: '60 arrows typical',
     suitableFor: ['Recurve', 'Barebow', 'Longbow', 'Compound'],
@@ -551,14 +550,14 @@ export const archerLevels: ArcherLevel[] = [
     recommendations: [
       'Start with a Club 252 or beginner-friendly WA18',
       "Look for events with 'beginner' or 'novice' in the title",
-      'Avoid county and open events until you have 2-3 competitions under your belt',
+      'Avoid county and open events until you have 2–3 competitions under your belt',
       'Ask the organiser about mentoring support on the day',
     ],
   },
   {
     id: 'novice',
     label: 'Novice',
-    description: 'Shot 1-3 competitions, shooting for 6-18 months',
+    description: 'Shot 1–3 competitions, shooting for 6–18 months',
     recommendations: [
       'Enter novice WA18 or Portsmouth events to build your score history',
       'Aim to claim your first Archery GB classification (Archer or Bowman)',
@@ -568,8 +567,8 @@ export const archerLevels: ArcherLevel[] = [
   },
   {
     id: 'club',
-    label: 'Club Archer',
-    description: 'Regular competitor, shooting for 1-3 years',
+    label: 'Club',
+    description: 'Regular competitor, shooting for 1–3 years',
     recommendations: [
       'Enter club and open WA18 and Portsmouth events for classification improvement',
       'Start the outdoor season with a WA70 if shooting recurve',
@@ -579,7 +578,7 @@ export const archerLevels: ArcherLevel[] = [
   },
   {
     id: 'county',
-    label: 'County / Advanced',
+    label: 'County',
     description: 'County-level competitor or holding 1st Class+',
     recommendations: [
       'Focus on ranking rounds and county championship qualifiers',
@@ -591,6 +590,7 @@ export const archerLevels: ArcherLevel[] = [
 ];
 
 // Helper functions
+
 // Find a competition by its URL slug.
 // Returns undefined if not found (page should call notFound()).
 export function getCompetitionBySlug(slug: string): Competition | undefined {

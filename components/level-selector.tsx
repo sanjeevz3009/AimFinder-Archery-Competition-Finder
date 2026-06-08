@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 // Interactive level selector on the homepage.
 // Lets archers self-identify their experience level and see
-// tailored recommendations. Client Component — local state only.
+// tailored recommendations. Client Component - local state only.
 export function LevelSelector() {
   const [selected, setSelected] = useState<string | null>(null);
   const selectedLevel = archerLevels.find((l) => l.id === selected);
@@ -30,12 +30,15 @@ export function LevelSelector() {
           {archerLevels.map((level) => (
             <button
               key={level.id}
+              type="button"
               onClick={() =>
                 setSelected(level.id === selected ? null : level.id)
               }
               className={cn(
-                'flex flex-col items-start gap-1 rounded-lg border border-border p-4 text-left transition-all hover:border-accent/50',
-                selected === level.id && 'border-accent bg-accent/10',
+                'flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-all duration-150 hover:border-accent/50 hover:bg-accent/5',
+                selected === level.id
+                  ? 'border-accent bg-accent/10 shadow-sm'
+                  : 'border-border',
               )}
             >
               <span className="font-medium text-foreground">{level.label}</span>
@@ -46,15 +49,15 @@ export function LevelSelector() {
           ))}
         </div>
 
-        {/* Recommendations panel — shown once a level is selected */}
+        {/* Recommendations panel - animates in once a level is selected */}
         {selectedLevel && (
-          <div className="mt-6 rounded-lg border border-accent/30 bg-accent/5 p-4">
+          <div className="mt-4 rounded-lg border border-accent/30 bg-accent/5 p-4">
             <div className="mb-3 flex items-center gap-2">
               <Badge className="bg-accent text-accent-foreground">
                 Recommended for {selectedLevel.label.toLowerCase()}s
               </Badge>
             </div>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {selectedLevel.recommendations.map((rec, i) => (
                 <li
                   key={i}
