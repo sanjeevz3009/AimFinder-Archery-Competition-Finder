@@ -23,9 +23,9 @@ import { competitions } from '@/lib/data';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AimFinder — Find Archery Competitions That Match Your Level',
+  title: 'AimFinder - Find Archery Competitions That Match Your Level',
   description:
-    'Search indoor, outdoor, novice, club and open archery competitions near you — with AI guidance to help you choose the right event.',
+    'Search indoor, outdoor, novice, club and open archery competitions near you - with AI guidance to help you choose the right event.',
 };
 
 // Show the 3 most imminent competitions as featured
@@ -92,7 +92,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
               Search indoor, outdoor, novice, club and open competitions near
-              you — with AI guidance to help you choose the right event.
+              you - with AI guidance to help you choose the right event.
             </p>
 
             {/* Primary CTAs */}
@@ -111,7 +111,7 @@ export default function HomePage() {
               </Button>
             </div>
 
-            {/* Hero search — client component so it can use useRouter */}
+            {/* Hero search - client component so it can use useRouter */}
             <div className="mt-12 max-w-xl">
               <HeroSearch />
             </div>
@@ -192,7 +192,7 @@ export default function HomePage() {
       <section className="border-b border-border py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-            {/* Left col — static, never moves */}
+            {/* Left col - static, never moves */}
             <div className="lg:pt-2">
               <h2 className="text-3xl font-bold text-foreground">
                 Competitions for every level
@@ -216,7 +216,7 @@ export default function HomePage() {
                 ))}
               </ul>
             </div>
-            {/* Right col — grows as recommendations appear, left col unaffected */}
+            {/* Right col - grows as recommendations appear, left col unaffected */}
             <div>
               <LevelSelector />
             </div>

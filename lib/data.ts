@@ -99,7 +99,7 @@ export const competitions: Competition[] = [
     totalSpaces: 48,
     organiser: 'Greater Manchester Archery Association',
     description:
-      'The annual county championship for Greater Manchester archers. Ranking round — scores count towards county and national classifications. Recurve and compound only.',
+      'The annual county championship for Greater Manchester archers. Ranking round - scores count towards county and national classifications. Recurve and compound only.',
     beginnerFriendly: false,
   },
   {
@@ -119,7 +119,7 @@ export const competitions: Competition[] = [
     totalSpaces: 30,
     organiser: 'Edinburgh City Archers',
     description:
-      'Designed specifically for first-time competitors. Briefing at the start covers scoring, safety, and what to expect. Mentors are paired with each group. No classification pressure — just enjoy your first event.',
+      'Designed specifically for first-time competitors. Briefing at the start covers scoring, safety, and what to expect. Mentors are paired with each group. No classification pressure - just enjoy your first event.',
     beginnerFriendly: true,
   },
   {
@@ -219,7 +219,7 @@ export const competitions: Competition[] = [
     totalSpaces: 30,
     organiser: 'Sheffield Archers',
     description:
-      'The Club 252 is the most beginner-friendly competition format — shot at 20 yards on a 60cm face. Perfect for archers finishing a beginner course who want a taste of competition without pressure.',
+      'The Club 252 is the most beginner-friendly competition format - shot at 20 yards on a 60cm face. Perfect for archers finishing a beginner course who want a taste of competition without pressure.',
     beginnerFriendly: true,
   },
   {
@@ -350,7 +350,7 @@ export const guides: Guide[] = [
     slug: 'wa18',
     title: 'WA18 Indoor Round Guide',
     summary:
-      'The WA18 is the most popular indoor archery competition format — shot at 18 metres on a 40cm target face. Suitable for all bowstyles and all levels from novice upwards.',
+      'The WA18 is the most popular indoor archery competition format - shot at 18 metres on a 40cm target face. Suitable for all bowstyles and all levels from novice upwards.',
     distance: '18 metres',
     targetFace: '40cm (10-ring face)',
     arrows: '60 arrows (10 ends of 6)',
@@ -361,22 +361,22 @@ You shoot 60 arrows at 18 metres on a 40cm target face. The round is divided int
 
 The 40cm face uses the standard 10-zone scoring system: 10 in the yellow centre, down to 1 for the outermost white ring. Most competitions run two rounds back-to-back for a total of 120 arrows.
 
-Because it is shot indoors at a fixed distance, the WA18 is not affected by wind or weather — making scores very consistent and comparable between competitions. This is why it is the primary ranking round used for national classifications.
+Because it is shot indoors at a fixed distance, the WA18 is not affected by wind or weather - making scores very consistent and comparable between competitions. This is why it is the primary ranking round used for national classifications.
 
-For beginners, the WA18 is ideal because the 18m distance is achievable with a light bow, the target face is relatively large, and the indoor environment is forgiving. Your first WA18 score becomes your baseline — you will see it improve quickly.`,
+For beginners, the WA18 is ideal because the 18m distance is achievable with a light bow, the target face is relatively large, and the indoor environment is forgiving. Your first WA18 score becomes your baseline - you will see it improve quickly.`,
     beginnerTips: [
       'Arrive at least 30 minutes early to sign in, collect your scorecard and find your boss (target).',
-      'You will shoot in a group of 3–4 archers. Take turns to go to the target and score together — always call your highest arrow first.',
+      'You will shoot in a group of 3–4 archers. Take turns to go to the target and score together - always call your highest arrow first.',
       'A score of 400–500 out of 600 is a solid first result for a beginner. Do not compare yourself to experienced archers.',
       'Bring a pencil (not a pen) for scoring, a spare finger tab or glove, and water.',
-      'If you are unsure about a score, call the judge before touching the arrow — arrows can be re-examined but not after they are pulled.',
+      'If you are unsure about a score, call the judge before touching the arrow - arrows can be re-examined but not after they are pulled.',
       'Dress comfortably. There is no dress code at most club-level events.',
     ],
     faqs: [
       {
         question: 'What bow do I need for a WA18?',
         answer:
-          'Any bow is welcome at most WA18 events — recurve, compound, barebow and longbow all shoot together but are scored separately. You just need to be able to reach 18m safely.',
+          'Any bow is welcome at most WA18 events - recurve, compound, barebow and longbow all shoot together but are scored separately. You just need to be able to reach 18m safely.',
       },
       {
         question: 'What is a good score for a first WA18?',
@@ -399,12 +399,12 @@ For beginners, the WA18 is ideal because the 18m distance is achievable with a l
     slug: 'portsmouth',
     title: 'Portsmouth Round Guide',
     summary:
-      'The Portsmouth is a classic British indoor round — 60 arrows at 20 yards on a 60cm target face. One of the most popular formats for all levels, particularly known for being longbow and barebow friendly.',
+      'The Portsmouth is a classic British indoor round - 60 arrows at 20 yards on a 60cm target face. One of the most popular formats for all levels, particularly known for being longbow and barebow friendly.',
     distance: '20 yards (18.29m)',
     targetFace: '60cm (5-zone or 10-zone face)',
     arrows: '60 arrows (10 ends of 6)',
     suitableFor: ['Recurve', 'Compound', 'Barebow', 'Longbow'],
-    content: `The Portsmouth round is one of Britain's oldest and most beloved indoor archery formats. Shot at 20 yards (18.29 metres) on a 60cm target face, it is slightly longer and uses a larger face than the WA18 — making it particularly popular with longbow archers and those who prefer a bigger aiming point.
+    content: `The Portsmouth round is one of Britain's oldest and most beloved indoor archery formats. Shot at 20 yards (18.29 metres) on a 60cm target face, it is slightly longer and uses a larger face than the WA18 - making it particularly popular with longbow archers and those who prefer a bigger aiming point.
 
 The 60cm face is available in both 5-zone (scoring 9, 7, 5, 3, 1) and 10-zone (1–10) configurations. Many clubs and competitions use the 10-zone face for more granular scoring, but some traditional events retain the 5-zone.
 
@@ -412,10 +412,10 @@ Because the Portsmouth is a British domestic round (not a World Archery standard
 
 Longbow and barebow archers particularly enjoy the Portsmouth because the 60cm face is easier to see clearly, and the slightly shorter distance reduces the gap between bow types. You will often see a wonderfully mixed field at a Portsmouth shoot.`,
     beginnerTips: [
-      "The 60cm face is bigger than the WA18's 40cm — this usually means beginners score better on their first Portsmouth than their first WA18.",
-      'Check which scoring system is being used (5-zone or 10-zone) before you arrive — it affects your scoring strategy.',
+      "The 60cm face is bigger than the WA18's 40cm - this usually means beginners score better on their first Portsmouth than their first WA18.",
+      'Check which scoring system is being used (5-zone or 10-zone) before you arrive - it affects your scoring strategy.',
       'Longbow archers: you are very welcome at Portsmouth events, and you will have your own category.',
-      'Warm up properly — 20 yards in an indoor hall can feel different to your usual outdoor practice.',
+      'Warm up properly - 20 yards in an indoor hall can feel different to your usual outdoor practice.',
       'Focus on your routine, not your score. Consistency builds scores.',
     ],
     faqs: [
@@ -427,7 +427,7 @@ Longbow and barebow archers particularly enjoy the Portsmouth because the 60cm f
       {
         question: 'Can I shoot the Portsmouth with a longbow?',
         answer:
-          'Yes — the Portsmouth is one of the most longbow-friendly indoor rounds. Most events have a longbow category with its own results.',
+          'Yes - the Portsmouth is one of the most longbow-friendly indoor rounds. Most events have a longbow category with its own results.',
       },
       {
         question: 'What is a good Portsmouth score?',
@@ -440,12 +440,12 @@ Longbow and barebow archers particularly enjoy the Portsmouth because the 60cm f
     slug: 'novice-competitions',
     title: "Your First Competition: A Beginner's Guide",
     summary:
-      'Everything you need to know before entering your first archery competition — what to expect, what to bring, how scoring works, and how to choose the right event.',
+      'Everything you need to know before entering your first archery competition - what to expect, what to bring, how scoring works, and how to choose the right event.',
     distance: 'Varies (18m–20 yards typical)',
     targetFace: '40cm or 60cm',
     arrows: '60 arrows typical',
     suitableFor: ['Recurve', 'Barebow', 'Longbow', 'Compound'],
-    content: `Entering your first archery competition can feel daunting. The terminology, the etiquette, the scoring — it is a lot to take in. But here is the truth: everyone at a beginner or novice competition was once exactly where you are, and the archery community is remarkably welcoming.
+    content: `Entering your first archery competition can feel daunting. The terminology, the etiquette, the scoring - it is a lot to take in. But here is the truth: everyone at a beginner or novice competition was once exactly where you are, and the archery community is remarkably welcoming.
 
 This guide walks you through everything you need to know to make your first competition a positive experience.
 
@@ -453,7 +453,7 @@ This guide walks you through everything you need to know to make your first comp
 
 Look for events labelled "beginner", "novice", or "beginner friendly". These events are designed for first-timers. Mentors and helpers are usually present, the atmosphere is relaxed, and nobody expects a high score from you.
 
-Avoid county, ranking, and open events for your first outing — not because you are not welcome, but because the additional pressure makes it harder to enjoy the experience.
+Avoid county, ranking, and open events for your first outing - not because you are not welcome, but because the additional pressure makes it harder to enjoy the experience.
 
 **On the day**
 
@@ -465,23 +465,23 @@ You will be placed on a "boss" (target stand) with two or three other archers. Y
 
 This is the most important etiquette rule. If there is any doubt about a score (arrow touching a line, or obscured by another arrow), call a judge. Once you pull an arrow, the score stands.`,
     beginnerTips: [
-      "Enter a 'beginner' or 'novice' labelled event — not a county or open event — for your first competition.",
+      "Enter a 'beginner' or 'novice' labelled event - not a county or open event - for your first competition.",
       'Bring: bow, arrows, finger tab/glove, arm guard, water, snacks, pencil, and a positive attitude.',
       'Arrive 30 minutes early so you are not rushing.',
-      'Ask your fellow archers if you are unsure about anything — they will help.',
+      'Ask your fellow archers if you are unsure about anything - they will help.',
       'Your first score is just a baseline. It will improve. Focus on enjoying the day.',
-      'Dress in comfortable layers — sports halls can be cold in winter.',
+      'Dress in comfortable layers - sports halls can be cold in winter.',
     ],
     faqs: [
       {
         question: 'Do I need to be a member of Archery GB to compete?',
         answer:
-          'For most beginner and club-level events, no — or you may be covered by a day membership. County and open ranking events usually require full Archery GB membership. Check the event description.',
+          'For most beginner and club-level events, no - or you may be covered by a day membership. County and open ranking events usually require full Archery GB membership. Check the event description.',
       },
       {
         question: 'What if I miss the target completely?',
         answer:
-          'It happens — even to experienced archers. A miss (arrow not on the target face) scores zero (an M). Write M on your scorecard. Do not be embarrassed; move on.',
+          'It happens - even to experienced archers. A miss (arrow not on the target face) scores zero (an M). Write M on your scorecard. Do not be embarrassed; move on.',
       },
       {
         question: 'How do I know what my score means?',
@@ -499,7 +499,7 @@ This is the most important etiquette rule. If there is any doubt about a score (
     slug: 'wa70',
     title: 'WA70 Outdoor Round Guide',
     summary:
-      'The WA70 is the standard outdoor recurve round — 72 arrows at 70 metres on a 122cm target face. The Olympic distance, used at club, national and international level throughout the outdoor season.',
+      'The WA70 is the standard outdoor recurve round - 72 arrows at 70 metres on a 122cm target face. The Olympic distance, used at club, national and international level throughout the outdoor season.',
     distance: '70 metres (recurve) / 60 metres (women/juniors)',
     targetFace: '122cm (10-zone face)',
     arrows: '72 arrows (12 ends of 6)',
@@ -514,18 +514,18 @@ The WA70 is typically shot as part of an outdoor season running from April to Se
 
 If you are new to outdoor archery, a Club 18m equivalent or shorter distances (WA50, WA30) are better starting points before attempting the full 70m distance.`,
     beginnerTips: [
-      'Build up to 70m gradually — start with 30m or 50m outdoors before attempting the full WA70 distance.',
+      'Build up to 70m gradually - start with 30m or 50m outdoors before attempting the full WA70 distance.',
       'Invest in a good clicker and spend time getting your draw length consistent before shooting long distances.',
       'Check the weather forecast. Rain, strong winds, and bright sun all affect your score significantly.',
-      'Bring sunscreen, a hat, and layers — outdoor sessions can last 4+ hours.',
+      'Bring sunscreen, a hat, and layers - outdoor sessions can last 4+ hours.',
       'A WA70 score of 500–580 out of 720 is a solid club-level result. World-class recurve archers score 680+.',
-      'Sight-in at 70m well before your first competition — distances look very different outdoors.',
+      'Sight-in at 70m well before your first competition - distances look very different outdoors.',
     ],
     faqs: [
       {
         question: 'Is the WA70 only for recurve?',
         answer:
-          'Yes — the WA70 is the standard recurve outdoor round. Compound archers shoot WA1440 or dedicated compound rounds at different distances. Barebow and longbow archers typically shoot shorter distances outdoors.',
+          'Yes - the WA70 is the standard recurve outdoor round. Compound archers shoot WA1440 or dedicated compound rounds at different distances. Barebow and longbow archers typically shoot shorter distances outdoors.',
       },
       {
         question: 'What equipment do I need for the WA70?',

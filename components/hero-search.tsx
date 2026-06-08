@@ -21,7 +21,7 @@ const quickFilters = [
  * /competitions with the right search params when the user
  * types a query or clicks a quick filter chip.
  *
- * The homepage itself stays a Server Component / ISR page —
+ * The homepage itself stays a Server Component / ISR page -
  * only this small interactive island is client-side.
  */
 export function HeroSearch() {
