@@ -6,20 +6,41 @@ import { getCompetitionBySlug } from '@/lib/data';
  *
  * Returns current spaces remaining for a competition.
  *
- * Rendering: force-dynamic + no-store - this must never be cached.
- * Even on an ISR-cached competition page, this endpoint always
- * returns fresh data. That's the architectural point: static page,
- * dynamic island.
+ * Rendering: force-dynamic + no-store — this must never be cached.
  *
- * In the next version this would query a real booking/ticketing database.
- * For the demo we simulate live drift by randomly decrementing the
- * mock value slightly on each call, so the number visibly changes
- * during a demo session.
+ * On Vercel serverless, in-process state resets on every cold start so
+ * a driftMap approach doesn't work. Instead we use a time-based
+ * deterministic calculation: the number of spaces decrements based on
+ * how many 30-second windows have elapsed since a fixed epoch, seeded
+ * with the slug so each competition drifts independently.
+ *
+ * This produces a number that visibly decreases over a demo session
+ * without needing a database or persistent state.
  */
 export const dynamic = 'force-dynamic';
 
-// Track drift per slug in-process (resets on cold start - fine for demo)
-const driftMap = new Map<string, number>();
+function simulateSpaces(slug: string, initial: number): number {
+  // Seed a simple hash from the slug so each competition drifts differently
+  const seed = slug.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+
+  // How many 30s windows have elapsed since a fixed epoch (start of today UTC)
+  const now = Date.now();
+  const epochStart = Math.floor(now / 86_400_000) * 86_400_000; // midnight UTC
+  const windows = Math.floor((now - epochStart) / 30_000);
+
+  // Each window has a ~20% chance of losing a space, seeded so it's
+  // deterministic for the same window but different per competition
+  let spaces = initial;
+  for (let i = 0; i < windows && spaces > 0; i++) {
+    // Pseudo-random per window using seed + window index
+    const rand = ((seed * 1103515245 + i * 12345) & 0x7fffffff) / 0x7fffffff;
+    if (rand < 0.2) {
+      spaces = Math.max(0, spaces - 1);
+    }
+  }
+
+  return spaces;
+}
 
 export async function GET(
   _req: Request,
@@ -35,28 +56,17 @@ export async function GET(
     );
   }
 
-  // Simulate slow drift: each call has a small chance of decrementing
-  const current = driftMap.get(slug) ?? competition.spacesRemaining;
-  let next = current;
-
-  // ~25% chance of losing a space each poll (realistic for a busy event)
-  if (current > 0 && Math.random() < 0.25) {
-    next = Math.max(0, current - 1);
-  }
-
-  driftMap.set(slug, next);
+  const spacesRemaining = simulateSpaces(slug, competition.spacesRemaining);
 
   return NextResponse.json(
     {
       slug,
-      spacesRemaining: next,
+      spacesRemaining,
       totalSpaces: competition.totalSpaces,
-      // Timestamp so the client can show "last updated"
       updatedAt: new Date().toISOString(),
     },
     {
       headers: {
-        // Explicitly no-store - never cache this response anywhere
         'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     },
