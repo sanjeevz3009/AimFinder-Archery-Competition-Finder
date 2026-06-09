@@ -13,6 +13,7 @@ import {
   Bot,
   Building2,
   Home,
+  Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -23,6 +24,7 @@ const navLinks = [
   { href: '/guides', label: 'Guides', icon: BookOpen },
   { href: '/assistant', label: 'AI Coach', icon: Bot },
   { href: '/organisers', label: 'For Organisers', icon: Building2 },
+  { href: '/about', label: 'About', icon: Info },
 ];
 
 /**

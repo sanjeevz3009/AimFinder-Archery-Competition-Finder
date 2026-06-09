@@ -15,7 +15,7 @@ const footerLinks = {
   ],
   company: [
     { href: '/organisers', label: 'For Organisers' },
-    { href: '#', label: 'About' },
+    { href: '/about', label: 'About' },
   ],
 };
 

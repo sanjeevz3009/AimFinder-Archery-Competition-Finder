@@ -142,7 +142,7 @@ export function AiAssistantPanel() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            rows={rows}
+            rows={Math.max(rows, 2)}
             placeholder="Ask about competitions, rounds, or your level…"
             disabled={isLoading}
             className="flex-1 resize-none rounded-xl border border-input bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50 disabled:opacity-50"
