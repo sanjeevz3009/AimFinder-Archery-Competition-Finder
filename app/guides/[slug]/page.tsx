@@ -74,7 +74,7 @@ export default async function GuidePage(props: { params: Params }) {
           </Link>
           <ChevronRight className="h-4 w-4" />
           <Link
-            href="/guides/wa18"
+            href="/guides"
             className="transition-colors hover:text-foreground"
           >
             Guides

@@ -5,7 +5,7 @@ const footerLinks = {
   product: [
     { href: '/competitions', label: 'Competitions' },
     { href: '/assistant', label: 'AI Coach' },
-    { href: '/guides/wa18', label: 'Guides' },
+    { href: '/guides', label: 'Guides' },
   ],
   resources: [
     { href: '/guides/wa18', label: 'WA18 Guide' },

@@ -5,7 +5,6 @@ import {
   Users,
   Search,
   RefreshCw,
-  ArrowRight,
   Info,
   Calendar,
   MapPin,
@@ -14,9 +13,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { OrganiserSubmitForm } from '@/components/organiser-submit-form';
 import { SpacesRemaining } from '@/components/spaces-remaining';
+import { SubmitEventButton } from './submit-event-button';
 
 // Static - this page rarely changes
 export const revalidate = 86400;
@@ -73,10 +72,7 @@ export default function OrganisersPage() {
               match their level.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Button size="lg">
-                Submit your event
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <SubmitEventButton />
               <Button size="lg" variant="outline" asChild>
                 <Link href="/competitions">See example listings</Link>
               </Button>
@@ -93,7 +89,10 @@ export default function OrganisersPage() {
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit) => (
-              <Card key={benefit.title} className="border-border bg-card">
+              <Card
+                key={benefit.title}
+                className="border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
+              >
                 <CardContent className="p-6">
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20">
                     <benefit.icon className="h-5 w-5 text-accent" />
@@ -112,7 +111,10 @@ export default function OrganisersPage() {
       </section>
 
       {/* Submission form + preview */}
-      <section className="border-b border-border bg-card py-16">
+      <section
+        id="submit-event"
+        className="border-b border-border bg-card py-16"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Form */}
@@ -125,56 +127,7 @@ export default function OrganisersPage() {
                 Our team will review and publish within 24 hours.
               </p>
 
-              <div className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField label="Competition name">
-                    <Input
-                      placeholder="e.g. London Indoor WA18"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                  <FormField label="Round type">
-                    <Input
-                      placeholder="e.g. WA18, Portsmouth"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                  <FormField label="Date">
-                    <Input
-                      type="date"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                  <FormField label="Entry fee">
-                    <Input
-                      placeholder="e.g. £15"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                  <FormField label="Venue name">
-                    <Input
-                      placeholder="e.g. Crystal Palace Sports Centre"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                  <FormField label="Postcode">
-                    <Input
-                      placeholder="e.g. SE19 2BB"
-                      className="border-border bg-background"
-                    />
-                  </FormField>
-                </div>
-
-                <FormField label="Description">
-                  <Textarea
-                    placeholder="Tell archers about your event, what to expect, and who it's suitable for..."
-                    rows={4}
-                    className="border-border bg-background"
-                  />
-                </FormField>
-
-                <Button className="w-full sm:w-auto">Submit for review</Button>
-              </div>
+              <OrganiserSubmitForm />
             </div>
 
             {/* Live preview card */}
@@ -266,22 +219,6 @@ export default function OrganisersPage() {
           </Card>
         </div>
       </section>
-    </div>
-  );
-}
-
-// Small helper to reduce label+input repetition in the form
-function FormField({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label className="text-sm font-medium text-foreground">{label}</label>
-      {children}
     </div>
   );
 }

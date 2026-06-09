@@ -2,59 +2,65 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import type { Guide } from '@/lib/data';
 
-// Card used on the homepage and at the bottom of guide detail pages
-// to link to other guides.
+/**
+ * Card used on the guides index page and at the bottom of guide detail pages.
+ * Matches the CompetitionCard hover behaviour exactly:
+ *  - Card lifts on hover (-translate-y-1) with accent border + shadow
+ *  - Title does NOT change colour on card hover
+ *  - "Read guide" CTA only animates on direct button hover (group/btn scope)
+ *  - mt-auto on CTA so all cards in a row align at the bottom
+ */
 export function GuideCard({ guide }: { guide: Guide }) {
   return (
-    <Card className="group overflow-hidden transition-all hover:border-accent/50 bg-card">
-      <CardContent className="p-6">
-        <div className="flex flex-col gap-4">
-          {/* Round metadata badges */}
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">{guide.distance}</Badge>
-            <Badge variant="outline">{guide.targetFace}</Badge>
-          </div>
+    <Card className="flex h-full flex-col bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg">
+      <CardContent className="flex flex-1 flex-col p-6">
+        {/* Round metadata badges */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">{guide.distance}</Badge>
+          <Badge variant="outline">{guide.targetFace}</Badge>
+          <Badge variant="outline">{guide.arrows}</Badge>
+        </div>
 
-          {/* Title */}
-          <h3 className="text-xl font-semibold text-foreground group-hover:text-accent transition-colors">
-            {guide.title}
-          </h3>
+        {/* Title - no colour change on card hover */}
+        <h3 className="mt-3 text-xl font-semibold text-foreground">
+          {guide.title}
+        </h3>
 
-          {/* Summary */}
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-            {guide.summary}
-          </p>
+        {/* Summary */}
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+          {guide.summary}
+        </p>
 
-          {/* Suitable bowstyles */}
-          <div className="flex flex-wrap gap-1.5">
-            {guide.suitableFor.map((bowstyle) => (
-              <Badge key={bowstyle} variant="outline" className="text-xs">
-                {bowstyle}
-              </Badge>
-            ))}
-          </div>
+        {/* Suitable bowstyles */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {guide.suitableFor.map((bowstyle) => (
+            <Badge key={bowstyle} variant="outline" className="text-xs">
+              {bowstyle}
+            </Badge>
+          ))}
+        </div>
 
-          <Button
-            asChild
-            variant="outline"
-            className="mt-2 w-full group-hover:bg-secondary"
+        {/* CTA - mt-auto pushes to bottom so all cards in a row align */}
+        <div className="mt-auto pt-4">
+          <Link
+            href={`/guides/${guide.slug}`}
+            className="group/btn flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary"
           >
-            <Link href={`/guides/${guide.slug}`}>
-              Read guide
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
+            Read guide
+            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+          </Link>
         </div>
       </CardContent>
     </Card>
   );
 }
 
-// Four-column facts grid shown at the top of a guide detail page.
-// Gives archers the key numbers at a glance.
+/**
+ * Four-column facts grid shown at the top of a guide detail page.
+ * Gives archers the key numbers at a glance.
+ */
 export function GuideFactsGrid({ guide }: { guide: Guide }) {
   const facts = [
     { label: 'Distance', value: guide.distance },
@@ -66,9 +72,9 @@ export function GuideFactsGrid({ guide }: { guide: Guide }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {facts.map((fact) => (
-        <Card key={fact.label} className="bg-secondary border-border">
+        <Card key={fact.label} className="border-border bg-secondary">
           <CardContent className="p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
               {fact.label}
             </p>
             <p className="mt-1 font-medium text-foreground">{fact.value}</p>

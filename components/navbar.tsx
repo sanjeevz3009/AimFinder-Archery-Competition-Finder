@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/competitions', label: 'Competitions', icon: Trophy },
-  { href: '/guides/wa18', label: 'Guides', icon: BookOpen },
+  { href: '/guides', label: 'Guides', icon: BookOpen },
   { href: '/assistant', label: 'AI Coach', icon: Bot },
   { href: '/organisers', label: 'For Organisers', icon: Building2 },
 ];

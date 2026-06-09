@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import type { Metadata } from "next";
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import type { Metadata } from 'next';
 import {
   Calendar,
   MapPin,
@@ -8,20 +8,20 @@ import {
   Clock,
   ChevronRight,
   ArrowRight,
-  DollarSign as Pound,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SpacesRemaining } from "@/components/spaces-remaining";
-import { CompetitionCard } from "@/components/competition-card";
-import { RegisterInterestButton } from "./register-interest-button";
+  Banknote,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SpacesRemaining } from '@/components/spaces-remaining';
+import { CompetitionCard } from '@/components/competition-card';
+import { RegisterInterestButton } from './register-interest-button';
 import {
   competitions,
   getCompetitionBySlug,
   getRelatedCompetitions,
-} from "@/lib/data";
-import { formatDateLong } from "@/lib/utils";
+} from '@/lib/data';
+import { formatDateLong } from '@/lib/utils';
 
 // ISR - pre-render all competition pages at build time, revalidate hourly.
 // On-demand revalidation via /api/revalidate would replace this in production.
@@ -39,7 +39,7 @@ export async function generateMetadata(props: {
   const { slug } = await props.params;
   const competition = getCompetitionBySlug(slug);
 
-  if (!competition) return { title: "Competition Not Found" };
+  if (!competition) return { title: 'Competition Not Found' };
 
   return {
     title: competition.title,
@@ -47,23 +47,21 @@ export async function generateMetadata(props: {
     openGraph: {
       title: `${competition.title} | AimFinder`,
       description: competition.description,
-      type: "article",
+      type: 'article',
     },
   };
 }
 
 // Level colours - keep consistent with CompetitionCard
 const levelColors: Record<string, string> = {
-  Beginner: "bg-accent text-accent-foreground",
-  Novice: "bg-accent/70 text-accent-foreground",
-  Club: "bg-secondary text-secondary-foreground",
-  County: "bg-warning/80 text-warning-foreground",
-  Open: "bg-primary text-primary-foreground",
+  Beginner: 'bg-accent text-accent-foreground',
+  Novice: 'bg-accent/70 text-accent-foreground',
+  Club: 'bg-secondary text-secondary-foreground',
+  County: 'bg-warning/80 text-warning-foreground',
+  Open: 'bg-primary text-primary-foreground',
 };
 
-export default async function CompetitionDetailPage(props: {
-  params: Params;
-}) {
+export default async function CompetitionDetailPage(props: { params: Params }) {
   const { slug } = await props.params;
   const competition = getCompetitionBySlug(slug);
 
@@ -75,7 +73,6 @@ export default async function CompetitionDetailPage(props: {
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-
         {/* Breadcrumbs */}
         <nav
           aria-label="Breadcrumb"
@@ -119,7 +116,6 @@ export default async function CompetitionDetailPage(props: {
 
         {/* Main detail grid */}
         <div className="grid gap-6 lg:grid-cols-3">
-
           {/* Left column - key details */}
           <div className="lg:col-span-2 space-y-6">
             <Card className="border-border bg-card">
@@ -149,7 +145,7 @@ export default async function CompetitionDetailPage(props: {
                   value={competition.organiser}
                 />
                 <DetailRow
-                  icon={Pound}
+                  icon={Banknote}
                   label="Entry fee"
                   value={`£${competition.entryFee}`}
                 />
@@ -200,14 +196,14 @@ export default async function CompetitionDetailPage(props: {
                   Not sure what the {competition.round} involves?
                 </h3>
                 <p className="mb-4 text-sm text-muted-foreground">
-                  Read our guide to understand distances, arrow counts, and
-                  what to expect on the day.
+                  Read our guide to understand distances, arrow counts, and what
+                  to expect on the day.
                 </p>
                 <Button asChild variant="outline" size="sm">
                   <Link
                     href={`/guides/${competition.round
                       .toLowerCase()
-                      .replace(" ", "-")}`}
+                      .replace(' ', '-')}`}
                   >
                     Read the {competition.round} guide
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -227,7 +223,7 @@ export default async function CompetitionDetailPage(props: {
 
                 {/*
                  * SpacesRemaining here uses the static mock value.
-                 * In Phase 3 I will be swapping this for the live /api/spaces/[slug]
+                 * In Phase 3 we'll swap this for the live /api/spaces/[slug]
                  * endpoint so the widget always shows fresh availability.
                  */}
                 <SpacesRemaining
@@ -267,7 +263,7 @@ export default async function CompetitionDetailPage(props: {
               <Button variant="outline" size="sm" asChild>
                 <Link
                   href={`/competitions?round=${encodeURIComponent(
-                    competition.round
+                    competition.round,
                   )}`}
                 >
                   View all
