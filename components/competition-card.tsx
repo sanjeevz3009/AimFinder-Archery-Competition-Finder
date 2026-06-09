@@ -32,32 +32,39 @@ const levelColors: Record<string, string> = {
 export function CompetitionCard({ competition }: { competition: Competition }) {
   const formattedDate = formatDateShort(competition.date);
 
+  // Only show "Beginner Friendly" badge when the level isn't already Beginner.
+  // A "Beginner" level event is inherently beginner-friendly - the badge would
+  // be redundant. It's only useful on Club/Novice/Open events that explicitly
+  // welcome newer archers.
+  const showBeginnerFriendly =
+    competition.beginnerFriendly && competition.level !== 'Beginner';
+
   return (
-    <Card className="relative flex flex-col bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg">
+    <Card className="flex h-full flex-col bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg">
       <CardContent className="flex flex-1 flex-col p-6">
-        {/* Header row - level, round, indoor/outdoor, fee */}
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className={levelColors[competition.level]}>
-              {competition.level}
+        {/* Badge row - level, round, indoor/outdoor */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge className={levelColors[competition.level]}>
+            {competition.level}
+          </Badge>
+          <Badge variant="outline">{competition.round}</Badge>
+          <Badge variant="outline">{competition.indoorOutdoor}</Badge>
+          {showBeginnerFriendly && (
+            <Badge className="border-accent/30 bg-accent/20 text-accent">
+              Beginner Friendly
             </Badge>
-            <Badge variant="outline">{competition.round}</Badge>
-            <Badge variant="outline">{competition.indoorOutdoor}</Badge>
-            {competition.beginnerFriendly && (
-              <Badge className="border-accent/30 bg-accent/20 text-accent">
-                Beginner Friendly
-              </Badge>
-            )}
-          </div>
-          <span className="text-lg font-semibold text-foreground">
-            £{competition.entryFee}
-          </span>
+          )}
         </div>
 
-        {/* Title - no colour change on card hover, only on direct hover */}
-        <h3 className="mt-4 text-xl font-semibold leading-tight text-foreground">
+        {/* Title */}
+        <h3 className="mt-3 text-xl font-semibold leading-tight text-foreground">
           {competition.title}
         </h3>
+
+        {/* Price - fixed position, always right after the title */}
+        <p className="mt-1 text-2xl font-bold text-foreground">
+          £{competition.entryFee}
+        </p>
 
         {/* Date, venue, spaces */}
         <div className="mt-4 flex flex-col gap-2 text-sm text-muted-foreground">
@@ -92,10 +99,7 @@ export function CompetitionCard({ competition }: { competition: Competition }) {
           ))}
         </div>
 
-        {/*
-         * CTA - pushed to the bottom via mt-auto so all cards align.
-         * Arrow only animates when you hover the button itself.
-         */}
+        {/* CTA - mt-auto pushes it to the bottom so all cards align */}
         <div className="mt-auto pt-4">
           <Link
             href={`/competitions/${competition.slug}`}
