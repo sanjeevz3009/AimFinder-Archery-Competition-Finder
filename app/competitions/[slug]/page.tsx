@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SpacesRemaining } from '@/components/spaces-remaining';
+import { LiveSpaces } from '@/components/live-spaces';
 import { CompetitionCard } from '@/components/competition-card';
 import { RegisterInterestButton } from './register-interest-button';
 import {
@@ -222,20 +222,18 @@ export default async function CompetitionDetailPage(props: { params: Params }) {
                 </h3>
 
                 {/*
-                 * SpacesRemaining here uses the static mock value.
-                 * In Phase 3 we'll swap this for the live /api/spaces/[slug]
-                 * endpoint so the widget always shows fresh availability.
+                 * LiveSpaces polls /api/spaces/[slug] every 30s with no-store.
+                 * The ISR competition page stays cached and fast for SEO,
+                 * while this client island always shows fresh availability.
+                 * Initial values from the page props avoid any loading flash.
                  */}
-                <SpacesRemaining
-                  remaining={competition.spacesRemaining}
-                  total={competition.totalSpaces}
+                <LiveSpaces
+                  slug={competition.slug}
+                  initialRemaining={competition.spacesRemaining}
+                  initialTotal={competition.totalSpaces}
                 />
 
                 <div className="mt-6">
-                  {/*
-                   * Register Interest - client component so the modal
-                   * can open without a page navigation.
-                   */}
                   <RegisterInterestButton competition={competition} />
                 </div>
               </CardContent>
