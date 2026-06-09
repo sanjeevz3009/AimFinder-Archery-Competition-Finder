@@ -5,13 +5,12 @@ import {
   Users,
   Search,
   RefreshCw,
-  Info,
   Calendar,
   MapPin,
   Clock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { OrganiserSubmitForm } from '@/components/organiser-submit-form';
 import { SpacesRemaining } from '@/components/spaces-remaining';
@@ -188,35 +187,6 @@ export default function OrganisersPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Production note */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Card className="border-accent/20 bg-accent/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Info className="h-5 w-5 text-accent" />
-                How this works in production
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="leading-relaxed text-muted-foreground">
-                In the next version, event submissions connect to a CMS or database
-                with a review workflow. Once approved, the event page is
-                published and cached. Any updates - including availability
-                changes - trigger on-demand revalidation via webhook, so archers
-                always see fresh information without a full site rebuild.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Badge variant="outline">CMS Integration</Badge>
-                <Badge variant="outline">Webhook Revalidation</Badge>
-                <Badge variant="outline">Organiser Dashboard</Badge>
-                <Badge variant="outline">Real-time Availability</Badge>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
     </div>
