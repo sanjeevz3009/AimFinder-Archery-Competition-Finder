@@ -147,44 +147,61 @@ export default async function CompetitionsPage(props: {
   );
 
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Page header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Competitions</h1>
-          <p className="mt-2 text-muted-foreground">
-            Find archery competitions that match your level and preferences
-          </p>
-        </div>
+    /*
+     * Full-viewport layout:
+     * - Outer div is exactly viewport height minus navbar (64px)
+     * - overflow-hidden ONLY on the two inner scroll columns, not the wrapper
+     *   (putting it on the wrapper clips card shadows and borders)
+     * - Sidebar: wider at w-80 so all filter groups fit without truncation
+     * - Cards: independent scroll with padding so shadows aren't clipped
+     */
+    <div
+      className="mx-auto flex max-w-7xl flex-col px-4 sm:px-6 lg:px-8"
+      style={{ height: 'calc(100vh - 4rem)' }}
+    >
+      {/* Page header - fixed, never scrolls */}
+      <div className="flex-shrink-0 py-6">
+        <h1 className="text-3xl font-bold text-foreground">Competitions</h1>
+        <p className="mt-1 text-muted-foreground">
+          Find archery competitions that match your level and preferences
+        </p>
+      </div>
 
-        <div className="flex flex-col gap-8 lg:flex-row">
-          {/* Sidebar - desktop only */}
-          <aside className="hidden w-72 flex-shrink-0 lg:block">
-            <div className="sticky top-24 rounded-xl border border-border bg-card p-6">
-              <h2 className="mb-4 text-base font-semibold text-foreground">
+      {/* Two-column body - fills remaining height */}
+      <div className="flex min-h-0 flex-1 gap-8 pb-6">
+        {/* Sidebar - w-80 gives enough room for all filter groups */}
+        <aside className="hidden w-80 flex-shrink-0 lg:flex lg:flex-col min-h-0">
+          <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-border bg-card">
+            {/* Sticky header inside the sidebar */}
+            <div className="flex-shrink-0 border-b border-border px-6 py-4">
+              <h2 className="text-base font-semibold text-foreground">
                 Filters
               </h2>
+            </div>
+            {/* Scrollable filter content */}
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
               <CompetitionFilters />
             </div>
-          </aside>
+          </div>
+        </aside>
 
-          {/* Main content */}
-          <div className="flex-1">
-            {/* Mobile filter trigger + active filter indicator */}
-            <div className="mb-6 flex items-center justify-between lg:hidden">
-              <MobileFilters />
-              {hasFilters && (
-                <span className="text-sm text-muted-foreground">
-                  Filters applied
-                </span>
-              )}
-            </div>
+        {/* Cards column - scrolls independently */}
+        <div className="flex min-h-0 flex-1 flex-col">
+          {/* Mobile filter trigger */}
+          <div className="mb-4 flex flex-shrink-0 items-center justify-between lg:hidden">
+            <MobileFilters />
+            {hasFilters && (
+              <span className="text-sm text-muted-foreground">
+                Filters applied
+              </span>
+            )}
+          </div>
 
-            {/*
-             * Suspense boundary - shows skeleton while CompetitionsList
-             * awaits its async searchParams. The key forces a fresh render
-             * whenever the URL changes, preventing stale results.
-             */}
+          {/*
+           * px-1 + negative mx-1 trick: gives card shadows room to render
+           * without the scrollbar sitting flush against the cards.
+           */}
+          <div className="min-h-0 flex-1 overflow-y-auto px-1 pt-2 pb-2">
             <Suspense
               key={JSON.stringify(params)}
               fallback={<CompetitionsListSkeleton />}

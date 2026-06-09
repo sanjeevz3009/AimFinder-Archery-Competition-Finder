@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -28,7 +28,7 @@ const sortOptions = [
   { value: 'beginner', label: 'Beginner friendly first' },
 ];
 
-// Quick filter chips shown on the homepage hero
+// Quick filter chips (homepage hero)
 const quickFilters = [
   { label: 'Indoor 18m', params: 'location=Indoor&round=WA18' },
   { label: 'WA18', params: 'round=WA18' },
@@ -38,16 +38,29 @@ const quickFilters = [
   { label: 'London', params: 'q=London' },
 ];
 
-// Core filter form - used both in the sidebar and the mobile sheet
-function CompetitionFiltersContent({
-  onFilterChange,
+// Shared filter form
+// instant={true}  -> desktop sidebar: every checkbox/select fires immediately
+// instant={false} -> mobile sheet: user picks filters then taps Apply
+function FiltersForm({
+  instant,
+  onApply,
 }: {
-  onFilterChange?: () => void;
+  instant: boolean;
+  onApply?: () => void;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Initialise from current URL params so state reflects the active filters
   const [search, setSearch] = useState(searchParams.get('q') ?? '');
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up any pending debounce when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
   const [selectedRounds, setSelectedRounds] = useState<string[]>(
     searchParams.get('round')?.split(',').filter(Boolean) ?? [],
   );
@@ -62,18 +75,44 @@ function CompetitionFiltersContent({
   );
   const [sort, setSort] = useState(searchParams.get('sort') ?? 'soonest');
 
-  // Push current filter state into the URL
-  const applyFilters = () => {
-    const params = new URLSearchParams();
-    if (search) params.set('q', search);
-    if (selectedRounds.length) params.set('round', selectedRounds.join(','));
-    if (selectedBowstyles.length)
-      params.set('bowstyle', selectedBowstyles.join(','));
-    if (selectedLevels.length) params.set('level', selectedLevels.join(','));
-    if (selectedLocation) params.set('location', selectedLocation);
-    if (sort && sort !== 'soonest') params.set('sort', sort);
-    router.push(`/competitions?${params.toString()}`);
-    onFilterChange?.();
+  // Build URLSearchParams from current local state
+  const buildParams = (
+    overrides: {
+      search?: string;
+      rounds?: string[];
+      bowstyles?: string[];
+      levels?: string[];
+      location?: string;
+      sort?: string;
+    } = {},
+  ) => {
+    const s = overrides.search ?? search;
+    const r = overrides.rounds ?? selectedRounds;
+    const b = overrides.bowstyles ?? selectedBowstyles;
+    const l = overrides.levels ?? selectedLevels;
+    const loc = 'location' in overrides ? overrides.location : selectedLocation;
+    const srt = overrides.sort ?? sort;
+
+    const p = new URLSearchParams();
+    if (s) p.set('q', s);
+    if (r.length) p.set('round', r.join(','));
+    if (b.length) p.set('bowstyle', b.join(','));
+    if (l.length) p.set('level', l.join(','));
+    if (loc) p.set('location', loc);
+    if (srt && srt !== 'soonest') p.set('sort', srt);
+    return p;
+  };
+
+  // Push to router - only called directly when instant=true
+  const pushNow = (overrides = {}) => {
+    const p = buildParams(overrides);
+    router.push(`/competitions${p.size ? `?${p}` : ''}`);
+  };
+
+  // Apply button handler - used when instant=false (mobile)
+  const handleApply = () => {
+    pushNow();
+    onApply?.();
   };
 
   const clearFilters = () => {
@@ -84,19 +123,20 @@ function CompetitionFiltersContent({
     setSelectedLocation('');
     setSort('soonest');
     router.push('/competitions');
-    onFilterChange?.();
+    onApply?.();
   };
 
   const toggleArray = (
     value: string,
     current: string[],
     setter: (v: string[]) => void,
+    key: 'rounds' | 'bowstyles' | 'levels',
   ) => {
-    setter(
-      current.includes(value)
-        ? current.filter((v) => v !== value)
-        : [...current, value],
-    );
+    const next = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    setter(next);
+    if (instant) pushNow({ [key]: next });
   };
 
   const hasFilters =
@@ -108,15 +148,34 @@ function CompetitionFiltersContent({
 
   return (
     <div className="space-y-6">
-      {/* Search */}
+      {/* Search
+           Desktop (instant=true):  debounces 400ms, fires as user types
+           Mobile  (instant=false): fires on Enter or via Apply button     */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search competitions or venues..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-          className="pl-9 bg-secondary border-border h-9"
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearch(value);
+            if (instant) {
+              // Debounce - push 400ms after the user stops typing
+              if (debounceRef.current) clearTimeout(debounceRef.current);
+              debounceRef.current = setTimeout(() => {
+                pushNow({ search: value });
+              }, 400);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              // Cancel any pending debounce and push immediately
+              if (debounceRef.current) clearTimeout(debounceRef.current);
+              pushNow({ search: e.currentTarget.value });
+              if (!instant) onApply?.();
+            }
+          }}
+          className="h-9 border-border bg-secondary pl-9"
         />
       </div>
 
@@ -125,8 +184,11 @@ function CompetitionFiltersContent({
         <label className="text-sm font-medium text-foreground">Sort by</label>
         <Select
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="bg-secondary border-border"
+          onChange={(e) => {
+            setSort(e.target.value);
+            if (instant) pushNow({ sort: e.target.value });
+          }}
+          className="border-border bg-secondary"
         >
           {sortOptions.map((opt) => (
             <SelectItem key={opt.value} value={opt.value}>
@@ -136,7 +198,7 @@ function CompetitionFiltersContent({
         </Select>
       </div>
 
-      {/* Round type */}
+      {/* Round Type */}
       <FilterGroup label="Round Type">
         {roundTypes.map((round) => (
           <CheckboxRow
@@ -144,7 +206,7 @@ function CompetitionFiltersContent({
             label={round}
             checked={selectedRounds.includes(round)}
             onChange={() =>
-              toggleArray(round, selectedRounds, setSelectedRounds)
+              toggleArray(round, selectedRounds, setSelectedRounds, 'rounds')
             }
           />
         ))}
@@ -158,7 +220,12 @@ function CompetitionFiltersContent({
             label={style}
             checked={selectedBowstyles.includes(style)}
             onChange={() =>
-              toggleArray(style, selectedBowstyles, setSelectedBowstyles)
+              toggleArray(
+                style,
+                selectedBowstyles,
+                setSelectedBowstyles,
+                'bowstyles',
+              )
             }
           />
         ))}
@@ -172,31 +239,38 @@ function CompetitionFiltersContent({
             label={level}
             checked={selectedLevels.includes(level)}
             onChange={() =>
-              toggleArray(level, selectedLevels, setSelectedLevels)
+              toggleArray(level, selectedLevels, setSelectedLevels, 'levels')
             }
           />
         ))}
       </FilterGroup>
 
-      {/* Indoor / Outdoor */}
+      {/* Venue Type */}
       <FilterGroup label="Venue Type">
         {locations.map((loc) => (
           <CheckboxRow
             key={loc}
             label={loc}
             checked={selectedLocation === loc}
-            onChange={() =>
-              setSelectedLocation(selectedLocation === loc ? '' : loc)
-            }
+            onChange={() => {
+              const next = selectedLocation === loc ? '' : loc;
+              setSelectedLocation(next);
+              if (instant) pushNow({ location: next });
+            }}
           />
         ))}
       </FilterGroup>
 
       {/* Actions */}
-      <div className="flex flex-col gap-2 border-t border-border pt-4">
-        <Button onClick={applyFilters} className="w-full">
-          Apply Filters
-        </Button>
+      <div className="space-y-2 border-t border-border pt-4">
+        {/* Apply button - mobile only */}
+        {!instant && (
+          <Button onClick={handleApply} className="w-full">
+            <Check className="mr-2 h-4 w-4" />
+            Apply Filters
+          </Button>
+        )}
+        {/* Clear - shown when any filter is active */}
         {hasFilters && (
           <Button variant="outline" onClick={clearFilters} className="w-full">
             <X className="mr-2 h-4 w-4" />
@@ -208,7 +282,7 @@ function CompetitionFiltersContent({
   );
 }
 
-// Small helper sub-components
+// Small helpers
 function FilterGroup({
   label,
   children,
@@ -218,7 +292,7 @@ function FilterGroup({
 }) {
   return (
     <div className="space-y-3">
-      <label className="text-sm font-medium text-foreground">{label}</label>
+      <p className="text-sm font-medium text-foreground">{label}</p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -241,10 +315,12 @@ function CheckboxRow({
   );
 }
 
-// Public exports - Suspense wrappers required because useSearchParams()
-// must be inside a Suspense boundary in Next.js App Router.
-
-/** Desktop sidebar filter panel */
+// Public exports
+/**
+ * Desktop sidebar - instant filtering on every change, no Apply button.
+ * Keyed on the search params string so the form remounts when the URL
+ * changes externally (e.g. "Clear all filters" from the empty state).
+ */
 export function CompetitionFilters() {
   return (
     <Suspense
@@ -255,12 +331,12 @@ export function CompetitionFilters() {
         </div>
       }
     >
-      <CompetitionFiltersContent />
+      <CompetitionFiltersKeyed instant={true} />
     </Suspense>
   );
 }
 
-/** Mobile slide-over filter sheet */
+/** Mobile sheet - Apply button, sheet closes on apply */
 export function MobileFilters() {
   const [open, setOpen] = useState(false);
 
@@ -268,9 +344,7 @@ export function MobileFilters() {
     <Sheet open={open} onOpenChange={setOpen}>
       <button
         onClick={() => setOpen(true)}
-        className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary lg:hidden',
-        )}
+        className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary lg:hidden"
       >
         <SlidersHorizontal className="h-4 w-4" />
         Filters
@@ -289,7 +363,10 @@ export function MobileFilters() {
               <div className="h-40 animate-pulse rounded-lg bg-secondary" />
             }
           >
-            <CompetitionFiltersContent onFilterChange={() => setOpen(false)} />
+            <CompetitionFiltersKeyed
+              instant={false}
+              onApply={() => setOpen(false)}
+            />
           </Suspense>
         </div>
       </SheetContent>
@@ -297,7 +374,25 @@ export function MobileFilters() {
   );
 }
 
-/** Quick-filter badge chips used on the homepage hero */
+/**
+ * Wrapper that reads searchParams and uses them as a key so FiltersForm
+ * remounts whenever the URL changes - ensuring local state always reflects
+ * the current URL (including when cleared externally).
+ */
+function CompetitionFiltersKeyed({
+  instant,
+  onApply,
+}: {
+  instant: boolean;
+  onApply?: () => void;
+}) {
+  const searchParams = useSearchParams();
+  // Re-key on the full param string - forces a remount on every URL change
+  const key = searchParams.toString();
+  return <FiltersForm key={key} instant={instant} onApply={onApply} />;
+}
+
+/** Quick-filter chips on the homepage hero */
 function QuickFiltersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -316,7 +411,7 @@ function QuickFiltersContent() {
         <Badge
           key={filter.label}
           variant="outline"
-          className="cursor-pointer px-3 py-1 hover:bg-secondary transition-colors"
+          className="cursor-pointer px-3 py-1 transition-colors hover:bg-secondary"
           onClick={() => handleQuickFilter(filter.params)}
         >
           {filter.label}
