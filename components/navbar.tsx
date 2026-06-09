@@ -12,11 +12,13 @@ import {
   BookOpen,
   Bot,
   Building2,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
+  { href: '/', label: 'Home', icon: Home },
   { href: '/competitions', label: 'Competitions', icon: Trophy },
   { href: '/guides', label: 'Guides', icon: BookOpen },
   { href: '/assistant', label: 'AI Coach', icon: Bot },
@@ -36,9 +38,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   const isActive = (href: string) =>
-    pathname === href ||
-    (href !== '/' &&
-      pathname.startsWith(href.split('/').slice(0, 2).join('/')));
+    href === '/'
+      ? pathname === '/'
+      : pathname === href || pathname.startsWith(href + '/');
 
   return (
     <>

@@ -15,7 +15,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CompetitionCard } from '@/components/competition-card';
 import { LevelSelector } from '@/components/level-selector';
-import { HeroSearch } from '@/components/hero-search';
+import { HeroAnimation } from '@/components/hero-animation';
 import { AnimatedSection } from '@/components/animated-section';
 import { competitions } from '@/lib/data';
 
@@ -88,34 +88,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36">
           <div className="max-w-3xl">
-            <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Find archery competitions that match your level
-            </h1>
-            <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
-              Search indoor, outdoor, novice, club and open competitions near
-              you - with AI guidance to help you choose the right event.
-            </p>
-
-            {/* Primary CTAs */}
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Button size="lg" asChild>
-                <Link href="/competitions">
-                  <Search className="mr-2 h-5 w-5" />
-                  Find competitions
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/assistant">
-                  <Sparkles className="mr-2 h-5 w-5" />
-                  Ask the AI coach
-                </Link>
-              </Button>
-            </div>
-
-            {/* Hero search - client component so it can use useRouter */}
-            <div className="mt-12 max-w-xl">
-              <HeroSearch />
-            </div>
+            <HeroAnimation />
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -14,19 +14,74 @@ const quickFilters = [
   { label: 'London', params: 'q=London' },
 ];
 
+// Placeholder texts that cycle in the search input
+const PLACEHOLDERS = [
+  'London',
+  'Sheffield',
+  'Bristol',
+  'Manchester',
+  'Edinburgh',
+  'Birmingham',
+  'Leeds',
+  'Oxford',
+];
+
+const TYPE_SPEED = 80; // ms per character typed
+const DELETE_SPEED = 45; // ms per character deleted
+const PAUSE_AFTER = 1800; // ms to pause on full word before deleting
+
 /**
  * Hero search bar + quick filter chips.
- *
- * Client Component so we can use useRouter to navigate to
- * /competitions with the right search params when the user
- * types a query or clicks a quick filter chip.
- *
- * The homepage itself stays a Server Component / ISR page -
- * only this small interactive island is client-side.
+ * The placeholder animates through city names to hint at what to type.
  */
 export function HeroSearch() {
   const router = useRouter();
   const [query, setQuery] = useState('');
+  const [placeholder, setPlaceholder] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Typewriter effect for placeholder
+  useEffect(() => {
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const current = PLACEHOLDERS[wordIndex];
+
+      if (!deleting) {
+        // Typing forward
+        charIndex++;
+        setPlaceholder(current.slice(0, charIndex));
+
+        if (charIndex === current.length) {
+          // Finished typing - pause then start deleting
+          deleting = true;
+          timer = setTimeout(tick, PAUSE_AFTER);
+          return;
+        }
+      } else {
+        // Deleting backward
+        charIndex--;
+        setPlaceholder(current.slice(0, charIndex));
+
+        if (charIndex === 0) {
+          // Finished deleting - move to next word
+          deleting = false;
+          wordIndex = (wordIndex + 1) % PLACEHOLDERS.length;
+          timer = setTimeout(tick, 400); // brief pause before typing next
+          return;
+        }
+      }
+
+      timer = setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
+    };
+
+    // Small initial delay so it starts after the hero fades in
+    timer = setTimeout(tick, 1800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +103,14 @@ export function HeroSearch() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by city, venue or postcode..."
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          // Show animated placeholder only when input is empty and not focused
+          placeholder={
+            isFocused || query
+              ? 'Search by city, venue or postcode...'
+              : placeholder || 'Search by city, venue or postcode...'
+          }
           className="h-14 w-full rounded-lg border border-border bg-card pl-12 pr-36 text-base text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50"
         />
         <button
