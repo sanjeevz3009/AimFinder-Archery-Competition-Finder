@@ -7,15 +7,15 @@ import { competitions, guides } from '@/lib/data';
  *
  * Streaming AI assistant powered by Vercel AI SDK + Anthropic Claude.
  *
- * Rendering: force-dynamic — personalised, never cached.
+ * Rendering: force-dynamic - personalised, never cached.
  *
  * The system prompt injects:
- *  1. Full competitions dataset — so the AI can recommend specific events
+ *  1. Full competitions dataset - so the AI can recommend specific events
  *     by name, date, level, location and spaces remaining
- *  2. Full guides content — so it can explain round formats and reference
+ *  2. Full guides content - so it can explain round formats and reference
  *     the correct guide when recommending an event
  *
- * In production you would:
+ * In the next version I am going to:
  *  - Rate-limit by IP or user session
  *  - Strip PII before sending to the model
  *  - Log latency and error rates via Vercel observability
@@ -58,7 +58,7 @@ function buildGuidesContext(): string {
 
 const SYSTEM_PROMPT = `You are an expert archery coach and competition advisor for AimFinder, a UK platform that helps archers find suitable competitions.
 
-Your job is to help archers — especially beginners and novices — find the right competitions for their level, understand round formats, and feel confident about entering.
+Your job is to help archers - especially beginners and novices - find the right competitions for their level, understand round formats, and feel confident about entering.
 
 AVAILABLE COMPETITIONS:
 ${buildCompetitionsContext()}
@@ -71,11 +71,11 @@ INSTRUCTIONS:
 - When recommending a competition, include: the title, date, city, entry fee, and spaces remaining
 - Always mention the relevant guide when recommending a round format (e.g. if recommending a WA18 event, mention the WA18 guide at /guides/wa18)
 - Format competition names in **bold** and guide links as [Guide Name](/guides/slug)
-- Be warm, encouraging and specific — beginners are often nervous about their first competition
+- Be warm, encouraging and specific - beginners are often nervous about their first competition
 - If someone asks about their level, ask follow-up questions: how long they've been shooting, their bowstyle, and their location
 - For beginners (shooting < 6 months or first competition), always recommend Beginner or Novice level events, never County or Open
 - If spaces are low (< 5 remaining), mention urgency
-- Keep responses concise but helpful — 3-5 short paragraphs max
+- Keep responses concise but helpful - 3-5 short paragraphs max
 - Always end with a specific action: a competition to enter or a guide to read
 - If asked something outside archery competitions (e.g. general chat), gently steer back to helping them find a competition
 - Today's date context: competitions in 2026-2027 are upcoming`;

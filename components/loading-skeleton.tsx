@@ -65,7 +65,7 @@ export function GuideCardSkeleton() {
 export function ChatMessageSkeleton() {
   return (
     <div className="flex items-start gap-3">
-      <Skeleton className="h-8 w-8 flex-shrink-0 rounded-full" />
+      <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-4/5" />

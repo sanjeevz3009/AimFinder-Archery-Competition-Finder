@@ -145,7 +145,7 @@ export default async function GuidePage(props: { params: Params }) {
               <ol className="space-y-3">
                 {guide.beginnerTips.map((tip, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-accent">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-accent">
                       {i + 1}
                     </span>
                     <span className="pt-0.5 text-muted-foreground">{tip}</span>

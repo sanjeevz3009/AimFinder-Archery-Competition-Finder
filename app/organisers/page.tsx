@@ -154,15 +154,15 @@ export default function OrganisersPage() {
 
                   <div className="mb-4 space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 flex-shrink-0" />
+                      <Calendar className="h-4 w-4 shrink-0" />
                       <span>Saturday, 14 November 2026</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 flex-shrink-0" />
+                      <Clock className="h-4 w-4 shrink-0" />
                       <span>09:00 start</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <MapPin className="h-4 w-4 shrink-0" />
                       <span>North London Archery Centre, London</span>
                     </div>
                   </div>
@@ -203,7 +203,7 @@ export default function OrganisersPage() {
             </CardHeader>
             <CardContent>
               <p className="leading-relaxed text-muted-foreground">
-                In production, event submissions connect to a CMS or database
+                In the next version, event submissions connect to a CMS or database
                 with a review workflow. Once approved, the event page is
                 published and cached. Any updates - including availability
                 changes - trigger on-demand revalidation via webhook, so archers

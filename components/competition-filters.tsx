@@ -281,7 +281,7 @@ function FiltersForm({
   );
 }
 
-// Small helpers
+// Helpers
 function FilterGroup({
   label,
   children,
@@ -350,7 +350,7 @@ export function MobileFilters() {
       </button>
       <SheetContent
         side="left"
-        className="w-[300px] overflow-y-auto bg-background"
+        className="w-75 overflow-y-auto bg-background"
         showCloseButton
       >
         <SheetHeader>

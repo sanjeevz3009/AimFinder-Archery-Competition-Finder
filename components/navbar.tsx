@@ -29,7 +29,7 @@ const navLinks = [
  * Sticky top navigation bar.
  *
  * Desktop: horizontal link row + CTA buttons.
- * Mobile: hamburger → full-width slide-down overlay menu.
+ * Mobile: hamburger -> full-width slide-down overlay menu.
  *   A full-width overlay on mobile looks far cleaner than a
  *   partial-width side drawer on small screens.
  */
@@ -136,7 +136,7 @@ export function Navbar() {
                           : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
                       )}
                     >
-                      <Icon className="h-5 w-5 flex-shrink-0 text-accent" />
+                      <Icon className="h-5 w-5 shrink-0 text-accent" />
                       {link.label}
                     </Link>
                   );

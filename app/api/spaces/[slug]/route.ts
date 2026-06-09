@@ -11,7 +11,7 @@ import { getCompetitionBySlug } from '@/lib/data';
  * returns fresh data. That's the architectural point: static page,
  * dynamic island.
  *
- * In production this would query a real booking/ticketing database.
+ * In the next version this would query a real booking/ticketing database.
  * For the demo we simulate live drift by randomly decrementing the
  * mock value slightly on each call, so the number visibly changes
  * during a demo session.

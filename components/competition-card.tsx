@@ -68,19 +68,19 @@ export function CompetitionCard({ competition }: { competition: Competition }) {
         {/* Date, venue, spaces */}
         <div className="mt-4 flex flex-col gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 flex-shrink-0" />
+            <Calendar className="h-4 w-4 shrink-0" />
             <span>
               {formattedDate} at {competition.time}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 flex-shrink-0" />
+            <MapPin className="h-4 w-4 shrink-0" />
             <span>
               {competition.venue}, {competition.city}
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <Users className="h-4 w-4 flex-shrink-0 mt-0.5" />
+            <Users className="h-4 w-4 shrink-0 mt-0.5" />
             <SpacesRemaining
               remaining={competition.spacesRemaining}
               total={competition.totalSpaces}

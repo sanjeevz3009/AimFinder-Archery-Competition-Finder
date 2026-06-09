@@ -71,7 +71,7 @@ export function HeroAnimation() {
         >
           {typed}
           {typed.length < TITLE.length && (
-            <span className="ml-0.5 inline-block w-[3px] animate-pulse rounded-sm bg-accent align-middle leading-none">
+            <span className="ml-0.5 inline-block w-0.75 animate-pulse rounded-sm bg-accent align-middle leading-none">
               &nbsp;
             </span>
           )}

@@ -63,7 +63,7 @@ export function LevelSelector() {
                   key={i}
                   className="flex items-start gap-2 text-sm text-foreground"
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                   {rec}
                 </li>
               ))}

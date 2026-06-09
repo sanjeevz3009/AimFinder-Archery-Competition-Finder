@@ -85,7 +85,7 @@ export default function HomePage() {
     <div className="flex flex-col">
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-accent/5 via-transparent to-transparent" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36">
           <div className="max-w-3xl">
             <HeroAnimation />
@@ -189,9 +189,9 @@ export default function HomePage() {
                     'Novice competitions for building experience',
                     'Club-level shoots for regular competitors',
                     'County and open events for serious archers',
-                  ].map((item, i) => (
+                  ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-accent" />
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-accent" />
                       <span className="text-foreground">{item}</span>
                     </li>
                   ))}

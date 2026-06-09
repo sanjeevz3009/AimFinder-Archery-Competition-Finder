@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Send,
   Sparkles,
@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 const SUGGESTED_PROMPTS = [
   "I've been shooting for 2 months, what competitions should I enter?",
   'What is a WA18 round and is it suitable for beginners?',
-  'I shoot recurve in London — what events are coming up?',
+  'I shoot recurve in London - what events are coming up?',
   "What's the difference between a Portsmouth and WA18?",
   "I've never competed before, where do I start?",
   'Are there any beginner-friendly competitions near Manchester?',
@@ -70,7 +70,7 @@ export function AiAssistantPanel() {
       style={{ height: 'calc(100vh - 12rem)' }}
     >
       {/* Header */}
-      <div className="flex flex-shrink-0 items-center gap-3 border-b border-border px-6 py-4">
+      <div className="flex shrink-0 items-center gap-3 border-b border-border px-6 py-4">
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/20">
           <Sparkles className="h-5 w-5 text-accent" />
         </div>
@@ -109,7 +109,7 @@ export function AiAssistantPanel() {
 
             {error && (
               <div className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4">
-                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
                 <div className="flex-1">
                   <p className="text-sm text-destructive">
                     Something went wrong. Please try again.
@@ -131,7 +131,7 @@ export function AiAssistantPanel() {
       </div>
 
       {/* Input */}
-      <div className="flex-shrink-0 border-t border-border px-4 py-4">
+      <div className="shrink-0 border-t border-border px-4 py-4">
         <form
           ref={formRef}
           onSubmit={handleSubmit}
@@ -152,7 +152,7 @@ export function AiAssistantPanel() {
             size="icon"
             disabled={!input.trim() || isLoading}
             onClick={() => setTimeout(() => scrollToBottom(true), 0)}
-            className="h-10 w-10 flex-shrink-0 rounded-xl"
+            className="h-10 w-10 shrink-0 rounded-xl"
           >
             <Send className="h-4 w-4" />
             <span className="sr-only">Send</span>
@@ -203,7 +203,7 @@ function Avatar({ role }: { role: 'user' | 'assistant' }) {
   return (
     <div
       className={cn(
-        'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full',
+        'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
         role === 'assistant' ? 'bg-accent/20' : 'bg-secondary',
       )}
     >

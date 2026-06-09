@@ -11,7 +11,7 @@ type Step = 'idle' | 'open' | 'success';
 /**
  * Demo "Register Interest" flow.
  *
- * In production this would:
+ * In the next version this would:
  *   1. POST to an API route that validates input with Zod
  *   2. Save to a database
  *   3. Send a confirmation email

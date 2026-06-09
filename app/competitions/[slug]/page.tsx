@@ -24,7 +24,7 @@ import {
 import { formatDateLong } from '@/lib/utils';
 
 // ISR - pre-render all competition pages at build time, revalidate hourly.
-// On-demand revalidation via /api/revalidate would replace this in production.
+// On-demand revalidation via /api/revalidate would replace this in the next version.
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -281,7 +281,7 @@ export default async function CompetitionDetailPage(props: { params: Params }) {
   );
 }
 
-// Small helper - consistent label/value row for the detail card
+// Helper - consistent label/value row for the detail card
 function DetailRow({
   icon: Icon,
   label,
@@ -293,7 +293,7 @@ function DetailRow({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <Icon className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
+      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
       <div>
         <p className="text-xs uppercase tracking-wide text-muted-foreground">
           {label}

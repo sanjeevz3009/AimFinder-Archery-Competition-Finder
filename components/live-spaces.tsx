@@ -27,7 +27,7 @@ type Props = {
  *  - This component fetches /api/spaces/[slug] with no-store on every poll
  *  - Result: static page with genuinely fresh availability data
  *
- * In production /api/spaces/[slug] would query a booking database.
+ * In the next version, /api/spaces/[slug] would query a booking database.
  * For the demo it simulates gradual drift so the number visibly changes.
  */
 export function LiveSpaces({

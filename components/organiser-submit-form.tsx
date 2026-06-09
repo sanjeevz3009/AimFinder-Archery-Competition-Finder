@@ -12,14 +12,14 @@ type Step = 'idle' | 'loading' | 'success';
 /**
  * Organiser event submission form.
  *
- * Demo flow - no real backend. In production this would:
+ * Demo flow - no real backend. In the next version this would:
  *   1. POST to an API route with Zod validation
  *   2. Save to a CMS / database with a review workflow
  *   3. Notify the admin team via email/webhook
  *   4. Once approved, trigger revalidatePath on the competitions pages
  *
- * For the demo we simulate a 1.2s network round-trip then show
- * a confirmation so the flow feels real during the interview.
+ * For the demo I simulate a 1.2s network round-trip then show
+ * a confirmation
  */
 export function OrganiserSubmitForm() {
   const [step, setStep] = useState<Step>('idle');

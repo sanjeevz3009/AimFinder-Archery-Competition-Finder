@@ -160,7 +160,7 @@ export default async function CompetitionsPage(props: {
       style={{ height: 'calc(100vh - 4rem)' }}
     >
       {/* Page header - fixed, never scrolls */}
-      <div className="flex-shrink-0 py-6">
+      <div className="shrink-0 py-6">
         <h1 className="text-3xl font-bold text-foreground">Competitions</h1>
         <p className="mt-1 text-muted-foreground">
           Find archery competitions that match your level and preferences
@@ -170,10 +170,10 @@ export default async function CompetitionsPage(props: {
       {/* Two-column body - fills remaining height */}
       <div className="flex min-h-0 flex-1 gap-8 pb-6">
         {/* Sidebar - w-80 gives enough room for all filter groups */}
-        <aside className="hidden w-80 flex-shrink-0 lg:flex lg:flex-col min-h-0">
+        <aside className="hidden w-80 shrink-0 lg:flex lg:flex-col min-h-0">
           <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-border bg-card">
             {/* Sticky header inside the sidebar */}
-            <div className="flex-shrink-0 border-b border-border px-6 py-4">
+            <div className="shrink-0 border-b border-border px-6 py-4">
               <h2 className="text-base font-semibold text-foreground">
                 Filters
               </h2>
@@ -188,7 +188,7 @@ export default async function CompetitionsPage(props: {
         {/* Cards column - scrolls independently */}
         <div className="flex min-h-0 flex-1 flex-col">
           {/* Mobile filter trigger */}
-          <div className="mb-4 flex flex-shrink-0 items-center justify-between lg:hidden">
+          <div className="mb-4 flex shrink-0 items-center justify-between lg:hidden">
             <MobileFilters />
             {hasFilters && (
               <span className="text-sm text-muted-foreground">
