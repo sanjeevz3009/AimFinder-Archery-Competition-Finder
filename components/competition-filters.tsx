@@ -14,7 +14,6 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Select, SelectItem } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 
 // Filter option constants
 const roundTypes = ['WA18', 'Portsmouth', 'WA70', 'Club 252'];
