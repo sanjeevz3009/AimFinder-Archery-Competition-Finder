@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://aimfinder.app',
+    url: 'https://aimfinder.vercel.app',
     siteName: 'AimFinder',
     title: 'AimFinder - Find Archery Competitions That Match Your Level',
     description:
