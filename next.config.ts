@@ -1,14 +1,53 @@
-// next.config.ts
 import type { NextConfig } from 'next';
 
+const securityHeaders = [
+  // Prevent browsers from guessing MIME types - stops MIME-sniffing attacks
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  // Prevent the site being embedded in an iframe - stops clickjacking
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  // Control how much referrer info is sent with requests
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  // Disable browser features the app doesn't use
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+  },
+  // Enable DNS prefetching for performance
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on',
+  },
+  // Force HTTPS for 2 years (only meaningful in production)
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+];
+
 const nextConfig: NextConfig = {
-  // Allow images from common archery venue domains in future
-  // For now I use no external images - placeholder avatars only
+  async headers() {
+    return [
+      {
+        // Apply security headers to all routes
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [],
   },
 
-  // Strict mode helps catch React issues early
   reactStrictMode: true,
 };
 

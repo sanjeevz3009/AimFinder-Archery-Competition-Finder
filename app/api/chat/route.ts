@@ -84,10 +84,6 @@ INSTRUCTIONS:
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-    console.log(
-      '[chat route] received messages:',
-      JSON.stringify(messages, null, 2),
-    );
 
     const result = streamText({
       model: anthropic('claude-haiku-4-5-20251001'),
