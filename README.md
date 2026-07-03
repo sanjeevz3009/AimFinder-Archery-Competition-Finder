@@ -170,3 +170,27 @@ The AI assistant requires an Anthropic API key. All other features work without 
 **Observability:** `@vercel/analytics` tracks page views and navigation. `@vercel/speed-insights` captures Core Web Vitals. Both are production-only. The AI route would benefit from logging latency and error rates via Vercel's log drains.
 
 **Scaling the AI context:** The current approach (full dataset in system prompt) works for 15 competitions. Beyond ~200 events, a vector search pipeline over Vercel Postgres + pgvector would retrieve only the top relevant matches, keeping the prompt tight and latency low.
+
+## Recent Improvements (July 2026)
+
+### AI Infrastructure
+
+- **Migrated to Vercel AI Gateway** - replaced direct Anthropic SDK calls with AI Gateway routing. Single endpoint, spend monitoring dashboard, and automatic provider fallbacks (Anthropic → Bedrock → Vertex) if a provider has an outage
+- **Upgraded to AI SDK v7** - migrated from v4 to v7, adopting the new `streamText` API, `convertToModelMessages`, `createUIMessageStreamResponse`, and the updated `useChat` hook with `sendMessage`/`status`/`regenerate`
+- **Prompt caching enabled** - `caching: 'auto'` via AI Gateway automatically caches the static system prompt (~2,000 tokens of competitions and guides data) on Anthropic's side. Subsequent requests serve cached tokens at ~10% of normal input token cost
+- **Provider fallbacks configured** - `order: ['anthropic', 'bedrock', 'vertexAnthropic']` ensures the AI coach stays up even during Anthropic provider outages
+
+### Security & Rate Limiting
+
+- **Vercel WAF rate limiting** - edge-level firewall rule blocks >20 requests per 10 minutes per IP on `/api/chat` before the function even starts. Zero compute cost on blocked requests
+- **In-code rate limiting** - `@vercel/firewall` `checkRateLimit()` adds a second application-layer check with proper `429` responses and `Retry-After` headers
+- **Input validation** - chat route now validates request body shape and message count before passing to the model
+
+### Bug Fixes
+
+- **Competition search no longer loses focus** - fixed a remount issue in `CompetitionFiltersKeyed` where keying on the full search params string caused the filter form to remount on every URL change, destroying input focus mid-typing
+- **Live spaces no longer drifts to zero** - capped the `simulateSpaces` drift to a maximum of 10 windows so competitions never show as fully booked during demos
+
+### Performance & Loading
+
+- **Added `app/competitions/loading.tsx`** - instant skeleton grid on initial navigation to `/competitions` before the server component renders, improving perceived performance on slower connections
