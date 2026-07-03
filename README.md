@@ -171,7 +171,7 @@ The AI assistant requires an Anthropic API key. All other features work without 
 
 **Scaling the AI context:** The current approach (full dataset in system prompt) works for 15 competitions. Beyond ~200 events, a vector search pipeline over Vercel Postgres + pgvector would retrieve only the top relevant matches, keeping the prompt tight and latency low.
 
-## Recent Improvements (July 2026)
+## Recent Improvements (3rd July 2026)
 
 ### AI Infrastructure
 
