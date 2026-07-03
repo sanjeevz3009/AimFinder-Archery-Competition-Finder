@@ -386,8 +386,9 @@ function CompetitionFiltersKeyed({
   onApply?: () => void;
 }) {
   const searchParams = useSearchParams();
-  // Re-key on the full param string - forces a remount on every URL change
-  const key = searchParams.toString();
+  // Only remount when all filters are cleared (empty params = user hit "Clear all")
+  // Don't remount on every URL change - that kills input focus mid-typing
+  const key = searchParams.toString() === '' ? 'empty' : 'active';
   return <FiltersForm key={key} instant={instant} onApply={onApply} />;
 }
 
