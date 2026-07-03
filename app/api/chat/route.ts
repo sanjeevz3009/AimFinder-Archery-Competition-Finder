@@ -1,25 +1,13 @@
-import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, convertToCoreMessages } from 'ai';
+import {
+  streamText,
+  convertToModelMessages,
+  toUIMessageStream,
+  createUIMessageStreamResponse,
+} from 'ai';
+import { checkRateLimit } from '@vercel/firewall';
 import { competitions, guides } from '@/lib/data';
 
-/**
- * POST /api/chat
- *
- * Streaming AI assistant powered by Vercel AI SDK + Anthropic Claude.
- *
- * Rendering: force-dynamic - personalised, never cached.
- *
- * The system prompt injects:
- *  1. Full competitions dataset - so the AI can recommend specific events
- *     by name, date, level, location and spaces remaining
- *  2. Full guides content - so it can explain round formats and reference
- *     the correct guide when recommending an event
- *
- * In the next version I am going to:
- *  - Rate-limit by IP or user session
- *  - Strip PII before sending to the model
- *  - Log latency and error rates via Vercel observability
- */
+// Rendering: force-dynamic - personalised, never cached.
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
@@ -68,7 +56,7 @@ ${buildGuidesContext()}
 
 INSTRUCTIONS:
 - Always recommend specific competitions from the list above by name when relevant
-- When recommending a competition, include: the title, date, city, entry fee, and spaces remaining
+- When recommending a competition, include: the title, date, level, location and spaces remaining
 - Always mention the relevant guide when recommending a round format (e.g. if recommending a WA18 event, mention the WA18 guide at /guides/wa18)
 - Format competition names in **bold** and guide links as [Guide Name](/guides/slug)
 - Be warm, encouraging and specific - beginners are often nervous about their first competition
@@ -80,23 +68,36 @@ INSTRUCTIONS:
 - If asked something outside archery competitions (e.g. general chat), gently steer back to helping them find a competition
 - Today's date context: competitions in 2026-2027 are upcoming`;
 
-// Route handler
 export async function POST(req: Request) {
+  if (process.env.NODE_ENV === 'production') {
+    const rateLimitResult = await checkRateLimit('Rate limit /api/chat', {
+      headers: req.headers,
+    });
+    if (rateLimitResult) return rateLimitResult;
+  }
+
   try {
     const { messages } = await req.json();
 
     const result = streamText({
-      model: anthropic('claude-haiku-4-5-20251001'),
-      system: SYSTEM_PROMPT,
-      messages: convertToCoreMessages(messages),
-      maxTokens: 600,
+      model: 'anthropic/claude-haiku-4-5-20251001',
+      instructions: SYSTEM_PROMPT,
+      messages: await convertToModelMessages(messages),
+      maxOutputTokens: 600,
       temperature: 0.7,
+      providerOptions: {
+        gateway: {
+          caching: 'auto',
+        },
+      },
       onError: (error) => {
         console.error('[chat route] streamText error:', error);
       },
     });
 
-    return result.toDataStreamResponse();
+    return createUIMessageStreamResponse({
+      stream: toUIMessageStream({ stream: result.stream }),
+    });
   } catch (err) {
     console.error('[chat route] caught error:', err);
     return new Response(JSON.stringify({ error: String(err) }), {

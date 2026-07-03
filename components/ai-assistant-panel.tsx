@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Send,
   Sparkles,
@@ -23,11 +23,12 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export function AiAssistantPanel() {
-  const { messages, input, setInput, handleSubmit, isLoading, error, reload } =
-    useChat({ api: '/api/chat' });
+  const { messages, sendMessage, status, error, regenerate } = useChat();
+
+  const [input, setInput] = useState('');
+  const isLoading = status === 'streaming' || status === 'submitted';
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = (force = false) => {
@@ -40,7 +41,6 @@ export function AiAssistantPanel() {
     }
   };
 
-  // Scroll on every message update (streaming chunks arrive as message updates)
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -50,18 +50,22 @@ export function AiAssistantPanel() {
     inputRef.current?.focus();
   };
 
+  const handleSend = () => {
+    const text = input.trim();
+    if (!text || isLoading) return;
+    sendMessage({ text });
+    setInput('');
+    setTimeout(() => scrollToBottom(true), 0);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (input.trim() && !isLoading) {
-        // Force scroll to bottom when user sends a new message
-        setTimeout(() => scrollToBottom(true), 0);
-        formRef.current?.requestSubmit();
-      }
+      handleSend();
     }
   };
 
-  const rows = Math.min(Math.max((input || '').split('\n').length, 1), 4);
+  const rows = Math.min(Math.max(input.split('\n').length, 1), 4);
   const isEmpty = messages.length === 0;
 
   return (
@@ -118,7 +122,7 @@ export function AiAssistantPanel() {
                     variant="outline"
                     size="sm"
                     className="mt-2"
-                    onClick={() => reload()}
+                    onClick={() => regenerate()}
                   >
                     <RefreshCw className="mr-2 h-3 w-3" />
                     Retry
@@ -132,11 +136,7 @@ export function AiAssistantPanel() {
 
       {/* Input */}
       <div className="shrink-0 border-t border-border px-4 py-4">
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="flex items-end gap-3"
-        >
+        <div className="flex items-end gap-3">
           <textarea
             ref={inputRef}
             value={input}
@@ -148,16 +148,16 @@ export function AiAssistantPanel() {
             className="flex-1 resize-none rounded-xl border border-input bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50 disabled:opacity-50"
           />
           <Button
-            type="submit"
+            type="button"
             size="icon"
             disabled={!input.trim() || isLoading}
-            onClick={() => setTimeout(() => scrollToBottom(true), 0)}
+            onClick={handleSend}
             className="h-10 w-10 shrink-0 rounded-xl"
           >
             <Send className="h-4 w-4" />
             <span className="sr-only">Send</span>
           </Button>
-        </form>
+        </div>
         <p className="mt-2 text-center text-xs text-muted-foreground">
           Press Enter to send · Shift+Enter for new line
         </p>
@@ -219,9 +219,18 @@ function Avatar({ role }: { role: 'user' | 'assistant' }) {
 function MessageBubble({
   message,
 }: {
-  message: { id: string; role: string; content: string };
+  message: {
+    id: string;
+    role: string;
+    parts: Array<{ type: string; text?: string }>;
+  };
 }) {
   const isUser = message.role === 'user';
+  const textContent = message.parts
+    .filter((p) => p.type === 'text')
+    .map((p) => p.text ?? '')
+    .join('');
+
   return (
     <div className={cn('flex items-start gap-3', isUser && 'flex-row-reverse')}>
       <Avatar role={isUser ? 'user' : 'assistant'} />
@@ -233,7 +242,7 @@ function MessageBubble({
             : 'rounded-tl-sm bg-secondary text-foreground',
         )}
       >
-        <MarkdownContent content={message.content} />
+        <MarkdownContent content={textContent} />
       </div>
     </div>
   );
