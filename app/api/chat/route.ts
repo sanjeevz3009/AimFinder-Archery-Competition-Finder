@@ -88,6 +88,7 @@ export async function POST(req: Request) {
       providerOptions: {
         gateway: {
           caching: 'auto',
+          order: ['anthropic', 'bedrock', 'vertexAnthropic'],
         },
       },
       onError: (error) => {
