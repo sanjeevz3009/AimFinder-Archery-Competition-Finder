@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { GuideCard } from '@/components/guide-card';
 import { guides } from '@/lib/data';
 
+// SSG + ISR - guide content changes rarely so I pre-render at build time
+// and revalidate every 24 hours.
 export const revalidate = 86400;
 
 export const metadata: Metadata = {

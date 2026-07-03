@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+export const runtime = 'edge'; // This function is run on the edge (Vercel Edge Functions) for faster response times
 
 export const alt =
   'AimFinder — Find archery competitions that match your level';

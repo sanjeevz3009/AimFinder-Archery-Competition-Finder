@@ -15,6 +15,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+// SSG + ISR: revalidate every 24 hours.
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
@@ -156,7 +157,7 @@ export default function AboutPage() {
                 publishing platforms used at scale across the Civil Service.
               </p>
               <p>
-                Outside of work I&apos;m into photography, go-karting, and
+                Outside of work I&apos;m into photography, go-karting, running and
                 formula car racing, and occasionally I write about the things
                 I&apos;m building.
               </p>

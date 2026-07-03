@@ -57,10 +57,8 @@ export function GuideCard({ guide }: { guide: Guide }) {
   );
 }
 
-/**
- * Four-column facts grid shown at the top of a guide detail page.
- * Gives archers the key numbers at a glance.
- */
+// Four-column facts grid shown at the top of a guide detail page.
+// Gives archers the key numbers at a glance.
 export function GuideFactsGrid({ guide }: { guide: Guide }) {
   const facts = [
     { label: 'Distance', value: guide.distance },

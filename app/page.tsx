@@ -19,7 +19,7 @@ import { HeroAnimation } from '@/components/hero-animation';
 import { AnimatedSection } from '@/components/animated-section';
 import { competitions } from '@/lib/data';
 
-// ISR: revalidate every hour. The homepage content is mostly stable but
+// SSG + ISR: revalidate every hour. The homepage content is mostly stable but
 // I want featured competitions to update when new events are added.
 export const revalidate = 3600;
 

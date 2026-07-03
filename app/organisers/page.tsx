@@ -16,7 +16,8 @@ import { OrganiserSubmitForm } from '@/components/organiser-submit-form';
 import { SpacesRemaining } from '@/components/spaces-remaining';
 import { SubmitEventButton } from './submit-event-button';
 
-// Static - this page rarely changes
+// SSG + ISR - this page rarely changes
+// and revalidate every 24 hours.
 export const revalidate = 86400;
 
 export const metadata: Metadata = {

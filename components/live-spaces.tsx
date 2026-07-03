@@ -12,10 +12,10 @@ type SpacesData = {
 
 type Props = {
   slug: string;
-  /** Initial values from the ISR page - shown immediately, no flash */
+  // Initial values from the ISR page - shown immediately, no flash
   initialRemaining: number;
   initialTotal: number;
-  /** How often to poll in ms. Default 30s */
+  // How often to poll in ms. Default 30s
   pollInterval?: number;
 };
 
@@ -94,7 +94,7 @@ export function LiveSpaces({
   );
 }
 
-/** Format a Date as "just now", "30s ago", "2m ago" etc */
+// Format a Date as "just now", "30s ago", "2m ago" etc
 function formatRelative(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
   if (seconds < 5) return 'just now';

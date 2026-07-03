@@ -9,7 +9,7 @@ export type Competition = {
   postcode: string;
   round: 'WA18' | 'Portsmouth' | 'WA70' | 'Club 252';
   bowstyles: Array<'Recurve' | 'Compound' | 'Barebow' | 'Longbow'>;
-  /** Display-friendly level label */
+  // Display-friendly level label
   level: 'Beginner' | 'Novice' | 'Club' | 'County' | 'Open';
   indoorOutdoor: 'Indoor' | 'Outdoor';
   entryFee: number;

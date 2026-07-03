@@ -91,8 +91,9 @@ export function OrganiserSubmitForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField label="Competition name" required>
+        <FormField label="Competition name" htmlFor="competition-name" required>
           <Input
+            id="competition-name"
             placeholder="e.g. London Indoor WA18"
             value={form.name}
             onChange={update('name')}
@@ -101,8 +102,9 @@ export function OrganiserSubmitForm() {
           />
         </FormField>
 
-        <FormField label="Round type" required>
+        <FormField label="Round type" htmlFor="round-type" required>
           <Input
+            id="round-type"
             placeholder="e.g. WA18, Portsmouth"
             value={form.round}
             onChange={update('round')}
@@ -111,8 +113,9 @@ export function OrganiserSubmitForm() {
           />
         </FormField>
 
-        <FormField label="Date" required>
+        <FormField label="Date" htmlFor="date" required>
           <Input
+            id="date"
             type="date"
             value={form.date}
             onChange={update('date')}
@@ -121,8 +124,9 @@ export function OrganiserSubmitForm() {
           />
         </FormField>
 
-        <FormField label="Entry fee">
+        <FormField label="Entry fee" htmlFor="entry-fee">
           <Input
+            id="entry-fee"
             placeholder="e.g. £15"
             value={form.fee}
             onChange={update('fee')}
@@ -130,8 +134,9 @@ export function OrganiserSubmitForm() {
           />
         </FormField>
 
-        <FormField label="Venue name" required>
+        <FormField label="Venue name" htmlFor="venue-name" required>
           <Input
+            id="venue-name"
             placeholder="e.g. Crystal Palace Sports Centre"
             value={form.venue}
             onChange={update('venue')}
@@ -140,8 +145,9 @@ export function OrganiserSubmitForm() {
           />
         </FormField>
 
-        <FormField label="Postcode" required>
+        <FormField label="Postcode" htmlFor="postcode" required>
           <Input
+            id="postcode"
             placeholder="e.g. SE19 2BB"
             value={form.postcode}
             onChange={update('postcode')}
@@ -151,8 +157,9 @@ export function OrganiserSubmitForm() {
         </FormField>
       </div>
 
-      <FormField label="Description">
+      <FormField label="Description" htmlFor="description">
         <Textarea
+          id="description"
           placeholder="Tell archers about your event, what to expect, and who it's suitable for..."
           rows={4}
           value={form.description}
@@ -175,15 +182,17 @@ export function OrganiserSubmitForm() {
 function FormField({
   label,
   required,
+  htmlFor,
   children,
 }: {
   label: string;
   required?: boolean;
+  htmlFor?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor={htmlFor} className="text-sm font-medium text-foreground">
         {label}
         {required && <span className="ml-1 text-accent">*</span>}
       </label>

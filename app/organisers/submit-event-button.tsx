@@ -2,10 +2,8 @@
 
 import { ArrowRight } from 'lucide-react';
 
-/**
- * Smooth-scrolls to the #submit-event form section when clicked.
- * Extracted as a Client Component so the organisers page stays a Server Component.
- */
+// Smooth-scrolls to the #submit-event form section when clicked.
+// Extracted as a Client Component so the organisers page stays a Server Component.
 export function SubmitEventButton() {
   return (
     <button
