@@ -6,7 +6,7 @@ import { getCompetitionBySlug } from '@/lib/data';
  *
  * Returns current spaces remaining for a competition.
  *
- * Rendering: force-dynamic + no-store — this must never be cached.
+ * Rendering: force-dynamic + no-store - this must never be cached.
  *
  * On Vercel serverless, in-process state resets on every cold start so
  * a driftMap approach doesn't work. Instead we use a time-based
