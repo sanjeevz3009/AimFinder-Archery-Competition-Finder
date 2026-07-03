@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     const rateLimitResult = await checkRateLimit('Rate limit /api/chat', {
       headers: req.headers,
     });
-    if (rateLimitResult) return rateLimitResult;
+    if (rateLimitResult instanceof Response) return rateLimitResult;
   }
 
   try {

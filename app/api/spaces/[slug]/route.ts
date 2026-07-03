@@ -20,19 +20,15 @@ import { getCompetitionBySlug } from '@/lib/data';
 export const dynamic = 'force-dynamic';
 
 function simulateSpaces(slug: string, initial: number): number {
-  // Seed a simple hash from the slug so each competition drifts differently
   const seed = slug.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-
-  // How many 30s windows have elapsed since a fixed epoch (start of today UTC)
   const now = Date.now();
-  const epochStart = Math.floor(now / 86_400_000) * 86_400_000; // midnight UTC
-  const windows = Math.floor((now - epochStart) / 30_000);
+  const epochStart = Math.floor(now / 86_400_000) * 86_400_000;
 
-  // Each window has a ~20% chance of losing a space, seeded so it's
-  // deterministic for the same window but different per competition
+  // Cap at 10 windows max so spaces never drift to zero across a full day
+  const windows = Math.min(Math.floor((now - epochStart) / 30_000), 10);
+
   let spaces = initial;
   for (let i = 0; i < windows && spaces > 0; i++) {
-    // Pseudo-random per window using seed + window index
     const rand = ((seed * 1103515245 + i * 12345) & 0x7fffffff) / 0x7fffffff;
     if (rand < 0.2) {
       spaces = Math.max(0, spaces - 1);
