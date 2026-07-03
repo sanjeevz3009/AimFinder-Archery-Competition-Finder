@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og';
 export const runtime = 'edge'; // This function is run on the edge (Vercel Edge Functions) for faster response times
 
 export const alt =
-  'AimFinder — Find archery competitions that match your level';
+  'AimFinder - Find archery competitions that match your level';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
