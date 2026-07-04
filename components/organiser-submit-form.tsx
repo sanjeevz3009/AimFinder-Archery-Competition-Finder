@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +23,14 @@ type Step = 'idle' | 'loading' | 'success';
  */
 export function OrganiserSubmitForm() {
   const [step, setStep] = useState<Step>('idle');
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus to the confirmation so screen-reader users are told the
+  // submission succeeded, rather than losing focus to the unmounted button.
+  useEffect(() => {
+    if (step === 'success') successHeadingRef.current?.focus();
+  }, [step]);
+
   const [form, setForm] = useState({
     name: '',
     round: '',
@@ -53,7 +61,11 @@ export function OrganiserSubmitForm() {
           <CheckCircle2 className="h-8 w-8 text-accent" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-foreground">
+          <h3
+            ref={successHeadingRef}
+            tabIndex={-1}
+            className="text-lg font-semibold text-foreground outline-none"
+          >
             Event submitted for review
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">

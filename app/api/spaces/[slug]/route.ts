@@ -14,23 +14,31 @@ import { getCompetitionBySlug } from '@/lib/data';
  * how many 30-second windows have elapsed since a fixed epoch, seeded
  * with the slug so each competition drifts independently.
  *
- * This produces a number that visibly decreases over a demo session
- * without needing a database or persistent state.
+ * The per-window decrement odds are budgeted so roughly 40% of spaces
+ * fill up over a full day, spreading the drift evenly across the whole
+ * day rather than only the first few minutes after UTC midnight.
  */
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+const WINDOW_MS = 30_000;
+const DAY_MS = 86_400_000;
+const WINDOWS_PER_DAY = DAY_MS / WINDOW_MS;
+const DAY_DECREMENT_FRACTION = 0.4;
 
 function simulateSpaces(slug: string, initial: number): number {
   const seed = slug.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
   const now = Date.now();
-  const epochStart = Math.floor(now / 86_400_000) * 86_400_000;
+  const epochStart = Math.floor(now / DAY_MS) * DAY_MS;
+  const windows = Math.floor((now - epochStart) / WINDOW_MS);
 
-  // Cap at 10 windows max so spaces never drift to zero across a full day
-  const windows = Math.min(Math.floor((now - epochStart) / 30_000), 10);
+  const decrementBudget = Math.max(1, Math.round(initial * DAY_DECREMENT_FRACTION));
+  const decrementProbability = decrementBudget / WINDOWS_PER_DAY;
 
   let spaces = initial;
   for (let i = 0; i < windows && spaces > 0; i++) {
     const rand = ((seed * 1103515245 + i * 12345) & 0x7fffffff) / 0x7fffffff;
-    if (rand < 0.2) {
+    if (rand < decrementProbability) {
       spaces = Math.max(0, spaces - 1);
     }
   }

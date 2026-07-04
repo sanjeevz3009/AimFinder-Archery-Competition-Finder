@@ -4,15 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
-const quickFilters = [
-  { label: 'Indoor 18m', params: 'location=Indoor&round=WA18' },
-  { label: 'WA18', params: 'round=WA18' },
-  { label: 'Portsmouth', params: 'round=Portsmouth' },
-  { label: 'Novice friendly', params: 'level=Beginner,Novice' },
-  { label: 'Recurve', params: 'bowstyle=Recurve' },
-  { label: 'London', params: 'q=London' },
-];
+import { quickFilters } from '@/lib/filters';
 
 // Placeholder texts that cycle in the search input
 const PLACEHOLDERS = [
@@ -48,7 +40,8 @@ export function HeroSearch() {
     let timer: ReturnType<typeof setTimeout>;
 
     const tick = () => {
-      const current = PLACEHOLDERS[wordIndex];
+      // wordIndex is always kept in range via modulo below
+      const current = PLACEHOLDERS[wordIndex]!;
 
       if (!deleting) {
         // Typing forward
@@ -105,6 +98,7 @@ export function HeroSearch() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          aria-label="Search by city, venue or postcode"
           // Show animated placeholder only when input is empty and not focused
           placeholder={
             isFocused || query

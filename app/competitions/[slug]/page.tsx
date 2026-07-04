@@ -19,8 +19,11 @@ import { RegisterInterestButton } from './register-interest-button';
 import {
   competitions,
   getCompetitionBySlug,
+  getGuideBySlug,
   getRelatedCompetitions,
+  roundGuideSlug,
 } from '@/lib/data';
+import type { Competition } from '@/lib/data';
 import { formatDateLong } from '@/lib/utils';
 
 // ISR - pre-render all competition pages at build time, revalidate hourly.
@@ -53,7 +56,7 @@ export async function generateMetadata(props: {
 }
 
 // Level colours - keep consistent with CompetitionCard
-const levelColors: Record<string, string> = {
+const levelColors: Record<Competition['level'], string> = {
   Beginner: 'bg-accent text-accent-foreground',
   Novice: 'bg-accent/70 text-accent-foreground',
   Club: 'bg-secondary text-secondary-foreground',
@@ -69,6 +72,7 @@ export default async function CompetitionDetailPage(props: { params: Params }) {
 
   const related = getRelatedCompetitions(slug, competition.round, 3);
   const formattedDate = formatDateLong(competition.date);
+  const guide = getGuideBySlug(roundGuideSlug[competition.round]);
 
   return (
     <div className="min-h-screen">
@@ -190,27 +194,25 @@ export default async function CompetitionDetailPage(props: { params: Params }) {
             </Card>
 
             {/* Guide link */}
-            <Card className="border-accent/20 bg-accent/5">
-              <CardContent className="p-6">
-                <h3 className="mb-1 font-semibold text-foreground">
-                  Not sure what the {competition.round} involves?
-                </h3>
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Read our guide to understand distances, arrow counts, and what
-                  to expect on the day.
-                </p>
-                <Button asChild variant="outline" size="sm">
-                  <Link
-                    href={`/guides/${competition.round
-                      .toLowerCase()
-                      .replace(' ', '-')}`}
-                  >
-                    Read the {competition.round} guide
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+            {guide && (
+              <Card className="border-accent/20 bg-accent/5">
+                <CardContent className="p-6">
+                  <h3 className="mb-1 font-semibold text-foreground">
+                    Not sure what the {competition.round} involves?
+                  </h3>
+                  <p className="mb-4 text-sm text-muted-foreground">
+                    Read our guide to understand distances, arrow counts, and
+                    what to expect on the day.
+                  </p>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/guides/${guide.slug}`}>
+                      Read the guide
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Right column - availability + CTA */}

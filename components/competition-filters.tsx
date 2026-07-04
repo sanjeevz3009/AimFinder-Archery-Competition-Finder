@@ -14,6 +14,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Select, SelectItem } from '@/components/ui/select';
+import { quickFilters } from '@/lib/filters';
 
 // Filter option constants
 const roundTypes = ['WA18', 'Portsmouth', 'WA70', 'Club 252'];
@@ -25,16 +26,6 @@ const sortOptions = [
   { value: 'soonest', label: 'Soonest first' },
   { value: 'spaces', label: 'Most spaces' },
   { value: 'beginner', label: 'Beginner friendly first' },
-];
-
-// Quick filter chips (homepage hero)
-const quickFilters = [
-  { label: 'Indoor 18m', params: 'location=Indoor&round=WA18' },
-  { label: 'WA18', params: 'round=WA18' },
-  { label: 'Portsmouth', params: 'round=Portsmouth' },
-  { label: 'Novice friendly', params: 'level=Beginner,Novice' },
-  { label: 'Recurve', params: 'bowstyle=Recurve' },
-  { label: 'London', params: 'q=London' },
 ];
 
 // Shared filter form

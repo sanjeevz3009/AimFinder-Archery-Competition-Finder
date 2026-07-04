@@ -589,6 +589,16 @@ export const archerLevels: ArcherLevel[] = [
   },
 ];
 
+// Maps each competition round to the guide that explains it.
+// 'Club 252' has no dedicated round guide - it's covered by the general
+// first-competition guide instead.
+export const roundGuideSlug: Record<Competition['round'], string> = {
+  WA18: 'wa18',
+  Portsmouth: 'portsmouth',
+  WA70: 'wa70',
+  'Club 252': 'novice-competitions',
+};
+
 // Helper functions
 
 // Find a competition by its URL slug.
@@ -601,6 +611,23 @@ export function getCompetitionBySlug(slug: string): Competition | undefined {
 // Returns undefined if not found (page should call notFound()).
 export function getGuideBySlug(slug: string): Guide | undefined {
   return guides.find((g) => g.slug === slug);
+}
+
+// Rounds explained by a given guide (may be more than one, e.g. novice-competitions).
+export function getRoundsForGuide(guideSlug: string): Competition['round'][] {
+  return (Object.keys(roundGuideSlug) as Competition['round'][]).filter(
+    (round) => roundGuideSlug[round] === guideSlug,
+  );
+}
+
+// Competitions whose round is explained by a given guide.
+export function getCompetitionsForGuide(
+  guideSlug: string,
+  limit = 3,
+): Competition[] {
+  return competitions
+    .filter((c) => roundGuideSlug[c.round] === guideSlug)
+    .slice(0, limit);
 }
 
 // Get competitions related to a given slug's round type,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Send,
   Sparkles,
@@ -9,6 +9,7 @@ import {
   User,
   AlertTriangle,
   RefreshCw,
+  Square,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -23,7 +24,8 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export function AiAssistantPanel() {
-  const { messages, sendMessage, status, error, regenerate } = useChat();
+  const { messages, sendMessage, status, error, regenerate, stop } =
+    useChat();
 
   const [input, setInput] = useState('');
   const isLoading = status === 'streaming' || status === 'submitted';
@@ -31,7 +33,7 @@ export function AiAssistantPanel() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = (force = false) => {
+  const scrollToBottom = useCallback((force = false) => {
     const container = scrollContainerRef.current;
     if (!container) return;
     const distanceFromBottom =
@@ -39,11 +41,11 @@ export function AiAssistantPanel() {
     if (force || distanceFromBottom < 120) {
       container.scrollTop = container.scrollHeight;
     }
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   const handleSuggestedPrompt = (prompt: string) => {
     setInput(prompt);
@@ -65,7 +67,7 @@ export function AiAssistantPanel() {
     }
   };
 
-  const rows = Math.min(Math.max(input.split('\n').length, 1), 4);
+  const rows = Math.min(Math.max(input.split('\n').length, 2), 4);
   const isEmpty = messages.length === 0;
 
   return (
@@ -91,6 +93,8 @@ export function AiAssistantPanel() {
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto px-6 py-4"
+        aria-live="polite"
+        aria-relevant="additions"
       >
         {isEmpty ? (
           <EmptyState onPromptSelect={handleSuggestedPrompt} />
@@ -142,21 +146,34 @@ export function AiAssistantPanel() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            rows={Math.max(rows, 2)}
+            rows={rows}
             placeholder="Ask about competitions, rounds, or your level…"
+            aria-label="Message the AI coach"
             disabled={isLoading}
             className="flex-1 resize-none rounded-xl border border-input bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50 disabled:opacity-50"
           />
-          <Button
-            type="button"
-            size="icon"
-            disabled={!input.trim() || isLoading}
-            onClick={handleSend}
-            className="h-10 w-10 shrink-0 rounded-xl"
-          >
-            <Send className="h-4 w-4" />
-            <span className="sr-only">Send</span>
-          </Button>
+          {isLoading ? (
+            <Button
+              type="button"
+              size="icon"
+              onClick={() => stop()}
+              className="h-10 w-10 shrink-0 rounded-xl"
+            >
+              <Square className="h-4 w-4" />
+              <span className="sr-only">Stop generating</span>
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="icon"
+              disabled={!input.trim()}
+              onClick={handleSend}
+              className="h-10 w-10 shrink-0 rounded-xl"
+            >
+              <Send className="h-4 w-4" />
+              <span className="sr-only">Send</span>
+            </Button>
+          )}
         </div>
         <p className="mt-2 text-center text-xs text-muted-foreground">
           Press Enter to send · Shift+Enter for new line

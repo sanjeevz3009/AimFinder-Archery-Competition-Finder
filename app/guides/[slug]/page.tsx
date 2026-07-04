@@ -12,7 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GuideFactsGrid, GuideCard } from '@/components/guide-card';
-import { guides, competitions, getGuideBySlug } from '@/lib/data';
+import {
+  guides,
+  getGuideBySlug,
+  getCompetitionsForGuide,
+  getRoundsForGuide,
+} from '@/lib/data';
 
 // SSG + ISR - guide content changes rarely so I pre-render at build time
 // and revalidate every 24 hours.
@@ -53,13 +58,8 @@ export default async function GuidePage(props: { params: Params }) {
   const otherGuides = guides.filter((g) => g.slug !== guide.slug);
 
   // Competitions that use this round - link archers directly to entries
-  const relatedCompetitions = competitions
-    .filter(
-      (c) =>
-        c.round.toLowerCase().replace(/\s+/g, '-') === slug ||
-        c.round.toLowerCase() === slug.replace(/-/g, ' '),
-    )
-    .slice(0, 3);
+  const relatedCompetitions = getCompetitionsForGuide(guide.slug, 3);
+  const relatedRounds = getRoundsForGuide(guide.slug);
 
   return (
     <div className="min-h-screen">
@@ -121,7 +121,7 @@ export default async function GuidePage(props: { params: Params }) {
                     return (
                       <div key={i}>
                         <h3 className="mb-2 font-semibold text-foreground">
-                          {header.replace(/\*\*/g, '')}
+                          {(header ?? '').replace(/\*\*/g, '')}
                         </h3>
                         {rest.length > 0 && <p>{rest.join(' ')}</p>}
                       </div>
@@ -182,16 +182,16 @@ export default async function GuidePage(props: { params: Params }) {
             <Card className="border-accent/20 bg-accent/5">
               <CardContent className="p-6">
                 <h3 className="mb-1 font-semibold text-foreground">
-                  Ready to enter a {guide.title.split(' ')[0]} competition?
+                  Ready to enter a competition?
                 </h3>
                 <p className="mb-4 text-sm text-muted-foreground">
                   We found {relatedCompetitions.length} upcoming{' '}
-                  {guide.slug.replace(/-/g, ' ').toUpperCase()} competitions.
+                  {relatedRounds.join(' / ')} competitions.
                 </p>
                 <Button asChild>
                   <Link
                     href={`/competitions?round=${encodeURIComponent(
-                      guide.slug.replace(/-/g, ' ').toUpperCase(),
+                      relatedRounds.join(','),
                     )}`}
                   >
                     View competitions

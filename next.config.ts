@@ -31,6 +31,24 @@ const securityHeaders = [
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
   },
+  // Content-Security-Policy - reduces XSS blast radius. Scripts/styles are
+  // all same-origin Next.js bundles; connect-src allows Vercel
+  // Analytics/Speed Insights (same-origin script, cross-origin reporting).
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://vitals.vercel-insights.com https://*.vercel-analytics.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'self'",
+    ].join('; '),
+  },
 ];
 
 const nextConfig: NextConfig = {

@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { competitions, guides } from "@/lib/data";
-
-const BASE_URL = "https://aimfinder.vercel.app";
+import { SITE_URL as BASE_URL } from "@/lib/site";
 
 /**
  * Generates the sitemap for AimFinder.
@@ -32,12 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/assistant`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
     },
     {
       url: `${BASE_URL}/organisers`,

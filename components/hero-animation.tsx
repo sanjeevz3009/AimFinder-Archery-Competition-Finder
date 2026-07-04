@@ -64,10 +64,10 @@ export function HeroAnimation() {
           {TITLE}
         </h1>
 
-        {/* Visible typed text - absolutely overlaid, no layout effect */}
+        {/* Visible typed text - purely decorative animation, hidden from assistive tech */}
         <h1
+          aria-hidden="true"
           className="absolute inset-0 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
-          aria-live="polite"
         >
           {typed}
           {typed.length < TITLE.length && (
@@ -76,6 +76,9 @@ export function HeroAnimation() {
             </span>
           )}
         </h1>
+
+        {/* Accessible title - announced once as the complete sentence, not character-by-character */}
+        <h1 className="sr-only">{TITLE}</h1>
       </div>
 
       {/* Subtitle */}

@@ -18,15 +18,15 @@ import { LevelSelector } from '@/components/level-selector';
 import { HeroAnimation } from '@/components/hero-animation';
 import { AnimatedSection } from '@/components/animated-section';
 import { competitions } from '@/lib/data';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/lib/site';
 
 // SSG + ISR: revalidate every hour. The homepage content is mostly stable but
 // I want featured competitions to update when new events are added.
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AimFinder - Find Archery Competitions That Match Your Level',
-  description:
-    'Search indoor, outdoor, novice, club and open archery competitions near you - with AI guidance to help you choose the right event.',
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
 };
 
 // Show the 3 most imminent competitions as featured

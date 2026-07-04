@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 
 type SpacesRemainingProps = {
@@ -18,7 +16,7 @@ export function SpacesRemaining({
   showBar = true,
   className,
 }: SpacesRemainingProps) {
-  const percentage = (remaining / total) * 100;
+  const percentage = total > 0 ? (remaining / total) * 100 : 0;
   const isLow = percentage <= 15;
   const isMedium = percentage > 15 && percentage <= 40;
 

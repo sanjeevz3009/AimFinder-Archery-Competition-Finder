@@ -4,12 +4,29 @@ import {
   toUIMessageStream,
   createUIMessageStreamResponse,
 } from 'ai';
+import type { UIMessage } from 'ai';
 import { checkRateLimit } from '@vercel/firewall';
+import { z } from 'zod';
 import { competitions, guides } from '@/lib/data';
 
 // Rendering: force-dynamic - personalised, never cached.
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 export const maxDuration = 30;
+
+// Validates request shape at the boundary; the AI SDK's own UIMessage type
+// covers the exact part structure, so we cast after this passes.
+const chatRequestSchema = z.object({
+  messages: z.array(
+    z
+      .object({
+        id: z.string(),
+        role: z.string(),
+        parts: z.array(z.unknown()),
+      })
+      .loose(),
+  ),
+});
 
 // Build context strings injected into the system prompt
 function buildCompetitionsContext(): string {
@@ -66,23 +83,31 @@ INSTRUCTIONS:
 - Keep responses concise but helpful - 3-5 short paragraphs max
 - Always end with a specific action: a competition to enter or a guide to read
 - If asked something outside archery competitions (e.g. general chat), gently steer back to helping them find a competition
-- Today's date context: competitions in 2026-2027 are upcoming`;
+- Today's date context: competitions in ${Array.from(new Set(competitions.map((c) => c.date.slice(0, 4)))).sort().join('-')} are upcoming`;
 
 export async function POST(req: Request) {
   if (process.env.NODE_ENV === 'production') {
     const rateLimitResult = await checkRateLimit('Rate limit /api/chat', {
       headers: req.headers,
     });
-    if (rateLimitResult instanceof Response) return rateLimitResult;
+    if (rateLimitResult.rateLimited) {
+      return new Response('Too Many Requests', { status: 429 });
+    }
+  }
+
+  const body = await req.json().catch(() => null);
+  const parsed = chatRequestSchema.safeParse(body);
+  if (!parsed.success) {
+    return new Response('Invalid request body', { status: 400 });
   }
 
   try {
-    const { messages } = await req.json();
-
     const result = streamText({
       model: 'anthropic/claude-haiku-4-5-20251001',
       instructions: SYSTEM_PROMPT,
-      messages: await convertToModelMessages(messages),
+      messages: await convertToModelMessages(
+        parsed.data.messages as UIMessage[],
+      ),
       maxOutputTokens: 600,
       temperature: 0.7,
       providerOptions: {
@@ -101,9 +126,8 @@ export async function POST(req: Request) {
     });
   } catch (err) {
     console.error('[chat route] caught error:', err);
-    return new Response(JSON.stringify({ error: String(err) }), {
+    return new Response('Something went wrong. Please try again.', {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
     });
   }
 }

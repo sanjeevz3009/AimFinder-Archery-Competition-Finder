@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const BASE_URL = 'https://aimfinder.vercel.app';
+import { SITE_URL as BASE_URL } from '@/lib/site';
 
 /**
  * Generates robots.txt for AimFinder.

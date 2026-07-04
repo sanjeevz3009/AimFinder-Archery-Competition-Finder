@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Target,
   Menu,
@@ -43,6 +43,22 @@ export function Navbar() {
     href === '/'
       ? pathname === '/'
       : pathname === href || pathname.startsWith(href + '/');
+
+  // Lock body scroll and close on Escape while the mobile menu is open
+  useEffect(() => {
+    if (!open) return;
+
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
 
   return (
     <>

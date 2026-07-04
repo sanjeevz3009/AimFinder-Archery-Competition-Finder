@@ -8,7 +8,7 @@ import type { Competition } from '@/lib/data';
 
 // Colour map for level badges - makes it immediately clear at a glance
 // which competitions are beginner-friendly vs advanced.
-const levelColors: Record<string, string> = {
+const levelColors: Record<Competition['level'], string> = {
   Beginner: 'bg-accent text-accent-foreground',
   Novice: 'bg-accent/70 text-accent-foreground',
   Club: 'bg-secondary text-secondary-foreground',

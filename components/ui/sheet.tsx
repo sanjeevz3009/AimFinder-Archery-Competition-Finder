@@ -37,27 +37,8 @@ function Sheet({
   );
 }
 
-function SheetTrigger({
-  asChild,
-  children,
-  className,
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }) {
-  const { onOpenChange } = React.useContext(SheetContext);
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(
-      children as React.ReactElement<{ onClick?: React.MouseEventHandler }>,
-      {
-        onClick: () => onOpenChange(true),
-      },
-    );
-  }
-  return (
-    <button className={className} onClick={() => onOpenChange(true)} {...props}>
-      {children}
-    </button>
-  );
-}
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 function SheetContent({
   side = 'right',
@@ -71,6 +52,8 @@ function SheetContent({
   showCloseButton?: boolean;
 }) {
   const { open, onOpenChange } = React.useContext(SheetContext);
+  const panelRef = React.useRef<HTMLDivElement>(null);
+  const previousFocusRef = React.useRef<HTMLElement | null>(null);
 
   // Close on Escape key
   React.useEffect(() => {
@@ -93,6 +76,42 @@ function SheetContent({
     };
   }, [open]);
 
+  // Move focus into the panel on open, restore it to the trigger on close,
+  // and trap Tab navigation inside the panel while it's open.
+  React.useEffect(() => {
+    if (!open) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    const panel = panelRef.current;
+    const firstFocusable = panel?.querySelector<HTMLElement>(
+      FOCUSABLE_SELECTOR,
+    );
+    (firstFocusable ?? panel)?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !panel) return;
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      previousFocusRef.current?.focus();
+    };
+  }, [open]);
+
   if (!open) return null;
 
   const sideClasses = {
@@ -112,11 +131,13 @@ function SheetContent({
       />
       {/* Panel */}
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         data-slot="sheet-content"
         className={cn(
-          'fixed z-50 flex flex-col gap-4 bg-popover text-popover-foreground shadow-lg',
+          'fixed z-50 flex flex-col gap-4 bg-popover text-popover-foreground shadow-lg outline-none',
           sideClasses[side],
           className,
         )}
@@ -183,7 +204,6 @@ function SheetDescription({ className, ...props }: React.ComponentProps<'p'>) {
 
 export {
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetFooter,

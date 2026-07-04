@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { SpacesRemaining } from '@/components/spaces-remaining';
 import { RefreshCw } from 'lucide-react';
 
@@ -43,33 +43,42 @@ export function LiveSpaces({
   });
   const [loading, setLoading] = useState(false);
   const [lastFetched, setLastFetched] = useState<Date | null>(null);
+  // Guards against a slow response overwriting a later, faster one.
+  const requestIdRef = useRef(0);
 
   const fetchSpaces = useCallback(async () => {
+    const requestId = ++requestIdRef.current;
     setLoading(true);
     try {
       const res = await fetch(`/api/spaces/${slug}`, {
         // Bypass any browser cache - we always want fresh data
         cache: 'no-store',
       });
-      if (res.ok) {
+      if (res.ok && requestId === requestIdRef.current) {
         const json = await res.json();
-        setData(json);
-        setLastFetched(new Date());
+        if (requestId === requestIdRef.current) {
+          setData(json);
+          setLastFetched(new Date());
+        }
       }
     } catch {
       // Silently fail - keep showing last known value
     } finally {
-      setLoading(false);
+      if (requestId === requestIdRef.current) setLoading(false);
     }
   }, [slug]);
 
   useEffect(() => {
-    // Fetch immediately on mount
-    fetchSpaces();
+    // Fetch immediately on mount, deferred a tick (like the recurring poll
+    // below) so this effect doesn't call setState synchronously.
+    const initialTimer = setTimeout(fetchSpaces, 0);
 
     // Then poll on interval
     const id = setInterval(fetchSpaces, pollInterval);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(id);
+    };
   }, [fetchSpaces, pollInterval]);
 
   return (

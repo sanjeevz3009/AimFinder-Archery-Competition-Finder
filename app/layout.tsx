@@ -5,6 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
 
 // Fonts - loaded via next/font for zero layout shift and self-hosting
 const geistSans = Geist({
@@ -19,12 +20,12 @@ const geistMono = Geist_Mono({
 
 // Site-wide metadata - individual pages override title via the template
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'AimFinder - Find Archery Competitions That Match Your Level',
+    default: SITE_TITLE,
     template: '%s | AimFinder',
   },
-  description:
-    'Search indoor, outdoor, novice, club and open archery competitions near you - with AI guidance to help you choose the right event.',
+  description: SITE_DESCRIPTION,
   keywords: [
     'archery competitions',
     'archery events UK',
@@ -37,22 +38,20 @@ export const metadata: Metadata = {
     'barebow',
     'novice archery',
   ],
-  authors: [{ name: 'AimFinder' }],
-  creator: 'AimFinder',
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://aimfinder.vercel.app',
-    siteName: 'AimFinder',
-    title: 'AimFinder - Find Archery Competitions That Match Your Level',
-    description:
-      'Search indoor, outdoor, novice, club and open archery competitions near you - with AI guidance to help you choose the right event.',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AimFinder - Find Archery Competitions That Match Your Level',
-    description:
-      'Search indoor, outdoor, novice, club and open archery competitions near you - with AI guidance to help you choose the right event.',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 
