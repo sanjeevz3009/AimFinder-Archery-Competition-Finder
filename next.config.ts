@@ -38,7 +38,12 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self'",
+      // 'unsafe-inline' is required because Next.js injects per-render
+      // hydration/streaming scripts inline. A nonce-based CSP would avoid
+      // this, but requires calling headers() in the root layout, which
+      // forces every route into dynamic rendering - incompatible with the
+      // ISR/SSG used on the homepage and competition/guide detail pages.
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
       "font-src 'self' data:",
